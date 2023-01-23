@@ -1,0 +1,16 @@
+{
+    "files": [
+        "main.qml",
+        "qml/optimisation_workspace.qml",
+        "qml/prediction_setup_1.qml",
+        "qml/developer_workspace.qml",
+        "qml/prediction_workspace.qml",
+        "qml/sensitivity_workspace.qml",
+        "qml/prediction_setup_2.qml",
+
+        "main.py",
+        "python/refresh.py",
+        "python/load.py",
+        "python/manufacturbility.py",
+        "python/model_control.py"]
+}

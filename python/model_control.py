@@ -8,6 +8,8 @@ num_channel = np.array([4,8,16,32,64,128,256,512])
 batch_size = 4
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
+model_dir = "python/CarDoorModel"
+
 class SEBlock(nn.Module):
     def __init__(self, channels, reduction=16):
         super(SEBlock, self).__init__()
@@ -294,32 +296,56 @@ class ResUNet(torch.nn.Module):
 
         return decoded
 
+
+
 model = ResUNet(num_channel,batch_size)
 model = model.to(device)
+
 
 # print("thinning model loaded")
 # model.load_state_dict(torch.load(os.path.join('CarDoorModel','Door_ResSEUNet_1408_B4_2000_LRFix0.0002_E6B6D6_Th.pkl'),map_location=device))
 # model.eval()
 
+
+def selectMaterialandProcess (material, process):
+
+    global model_dir
+
+    material = str(material).lower()
+    process = str(process).lower()
+
+    print(material + "is selected")
+    print(process + "is selected")
+
+    model_dir = os.path.join(model_dir, material+"_"+process)
+
+
 def load(type):
     '''Loads the thinning field model. Takes no arguments and returns the loaded model object.'''
 
-    global model
+    global model, model_dir
 
-    if type == "Thinning":
-        print("thinning model loaded")
-        model.load_state_dict(torch.load(os.path.join('CarDoorModel','Door_ResSEUNet_1408_B4_2000_LRFix0.0002_E6B6D6_Th.pkl'),map_location=device))
-        model.eval()
+    type = str(type).lower()
+    model_dir = model_dir + "_" + type
 
-    elif type == "Dispalcement":
-        print("displacement model loaded")
-        model.load_state_dict(torch.load(os.path.join('CarDoorModel','Door_ResSEUNet_1408_B4_2000_LRFix0.0002_E6B6D6_Th.pkl'),map_location=device))
-        model.eval()
+#    if type == "Thinning":
+#        print("thinning model loaded")
+#        model.load_state_dict(torch.load(model_dir,map_location=device))
+#        model.eval()
+
+#    elif type == "Dispalcement":
+#        print("displacement model loaded")
+#        model.load_state_dict(torch.load(model_dir,map_location=device))
+#        model.eval()
         
-    elif type == "Stress":
-        print("stress model loaded")
-        model.load_state_dict(torch.load(os.path.join('CarDoorModel','Door_ResSEUNet_1408_B4_2000_LRFix0.0002_E6B6D6_Th.pkl'),map_location=device))
-        model.eval()
+#    elif type == "Stress":
+#        print("stress model loaded")
+#        model.load_state_dict(torch.load(model_dir,map_location=device))
+#        model.eval()
+
+    print(type + " model loaded")
+    model.load_state_dict(torch.load(model_dir,map_location=device))
+    model.eval()
 
     return model
 

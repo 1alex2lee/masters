@@ -1,20 +1,13 @@
-import torch
 import numpy as np
-import matplotlib as mpl
-from mpl_toolkits import mplot3d
-import matplotlib.pyplot as plt
 import os
 import re #for splitting strings
 import meshio
 from scipy.interpolate import griddata
-import concurrent.futures
-import subprocess
-import time
 
 #paths
-dieImagesPath = "Die\\"
-punchImagesPath = "Punch\\"
-Edges_dir = 'Edge\\'
+dieImagesPath = ""
+punchImagesPath = ""
+Edges_dir = ""
 
 ### HELPER FUNCTIONS ###
 
@@ -80,7 +73,6 @@ def is_in_poly(p, poly):
                 is_in = not is_in
     return is_in
 
-
 def postprocess(i, file, edgefile, baseLength_W, baseLength_H, imageResolution_W, imageResolution_H):
     print("-> DIE START", file, "\n")
 
@@ -93,8 +85,8 @@ def postprocess(i, file, edgefile, baseLength_W, baseLength_H, imageResolution_W
     mesh.points[:, 2] = -1 * mesh.points[:, 2]
 
     # interpolate to grid
-    X = np.linspace(790, baseLength_H, imageResolution_H)
-    Y = np.linspace(-460, baseLength_W, imageResolution_W)
+    X = np.linspace(0, baseLength_H, imageResolution_H)
+    Y = np.linspace(0, baseLength_W, imageResolution_W)
     gridX, gridY = np.meshgrid(X, Y)
     dieImage = np.ones((imageResolution_W, imageResolution_H))
 
@@ -120,7 +112,7 @@ def postprocess(i, file, edgefile, baseLength_W, baseLength_H, imageResolution_W
 
             # If the keyword is at the beginning of the line (index == 0)
             if nodalIndex == 0:
-                nodalIDs.append(np.int(line[4:16]))
+                nodalIDs.append(int(line[4:16]))
 
             if elementIndex == 0:
                 temp = line.replace('\n', ' ')  # replace \n with white space
@@ -154,27 +146,33 @@ def postprocess(i, file, edgefile, baseLength_W, baseLength_H, imageResolution_W
 
     return i, dieImage
 
-if __name__ == '__main__':
 
-    t = time.time()
+def load(die_dir, edge_dir):
 
-    sortedFiles = sortFiles(dieImagesPath, '.nas')
-    edgeFiles = sortedgeFiles(Edges_dir, 'Die.nas')
+    # sortedFiles = sortFiles(dieImagesPath, '.nas')
+    # edgeFiles = sortedgeFiles(Edges_dir, 'Die.nas')
+
+    sortedFiles = die_dir[5:]
+    edgeFiles = edge_dir[5:]
 
     # fixed parameters
-    imageResolution_H = [384 for i in range(len(sortedFiles))]
-    imageResolution_W = [256 for i in range(len(sortedFiles))]
-    baseLength_H = [1090 for i in range(len(sortedFiles))]  # in mm
-    baseLength_W = [-660 for i in range(len(sortedFiles))]  # in mm
+    # imageResolution_H = [384 for i in range(len(sortedFiles))]
+    # imageResolution_W = [256 for i in range(len(sortedFiles))]
+    # baseLength_H = [1090 for i in range(len(sortedFiles))]  # in mm
+    # baseLength_W = [-660 for i in range(len(sortedFiles))]  # in mm
+
+    imageResolution_H = 384
+    imageResolution_W = 256
+    baseLength_H = 1090  # in mm
+    baseLength_W = -660  # in mm
 
     # obtain die images
-    dieImages = np.zeros((len(sortedFiles), imageResolution_W[0], imageResolution_H[0]))
+    dieImages = np.zeros((imageResolution_W, imageResolution_H))
 
-    with concurrent.futures.ProcessPoolExecutor(max_workers = 10) as executor:
-        for i, dieImage in executor.map(postprocess, range(len(sortedFiles)), sortedFiles, edgeFiles, baseLength_W, baseLength_H, imageResolution_W, imageResolution_H):
-            dieImages[i, :, :] = dieImage
+    # with concurrent.futures.ProcessPoolExecutor(max_workers = 10) as executor:
+    #     for i, dieImage in executor.map(postprocess, 1, sortedFiles, edgeFiles, baseLength_W, baseLength_H, imageResolution_W, imageResolution_H):
+    #         dieImages[i, :, :] = dieImage
 
-    np.save('DoorDieHandleImages01.npy', dieImages)
+    i, dieImage = postprocess (0, sortedFiles, edgeFiles, baseLength_W, baseLength_H, imageResolution_W, imageResolution_H)
 
-    t_end = time.time()
-    print(t_end - t)
+    np.save(os.path.join("temp","imported_die.npy"), dieImage)

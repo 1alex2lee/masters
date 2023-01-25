@@ -7,10 +7,15 @@
         "qml/prediction_workspace.qml",
         "qml/sensitivity_workspace.qml",
         "qml/prediction_setup_2.qml",
+        "qml/prediction_setup_3.qml",
+        "qml/start_screen.qml",
 
         "main.py",
         "python/refresh.py",
         "python/load.py",
         "python/manufacturbility.py",
-        "python/model_control.py"]
+        "python/model_control.py",
+        "python/die.py",
+
+        "temp/imported_die.png"]
 }

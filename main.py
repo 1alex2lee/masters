@@ -23,11 +23,13 @@ class MainWindow(QObject):
 
         self.update.emit(manufacturbility)
 
+
     @Slot(str)
     def changeResultType (self, str):
         model_control.load(str)
 
     bestruntable = Signal(QAbstractTableModel)
+
 
     @Slot()
     def updateBestruntable (self):
@@ -36,9 +38,15 @@ class MainWindow(QObject):
 
         self.bestruntable.emit(tablemodel)
 
+
     @Slot(str, str)
     def loadPredictionMesh (self, die, edge):
         load.predictionmesh(die, edge)
+
+
+    @Slot(str, str)
+    def setMaterialandProcess (self, material, process):
+        model_control.selectMaterialandProcess(material, process)
 
 
 if __name__ == "__main__":

@@ -52,7 +52,7 @@ Item {
         Image {
             id: image
             anchors.verticalCenter: parent.verticalCenter
-            source: "../temp/imported_die.png"
+            source: "../temp/input_1.png"
             anchors.horizontalCenter: parent.horizontalCenter
             fillMode: Image.PreserveAspectFit
         }

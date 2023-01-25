@@ -4,36 +4,14 @@ import QtQuick.Window
 import QtQuick.Controls
 
 Item {
-    id: predictionsetup1item
+    id: predictionsetup3item
     width: 450
-    height: 250
+    height: 210
     Component.onCompleted: {
         window.width = width
         window.height = height
         window.x = Screen.width / 2 - width / 2
         window.y = Screen.height / 2 - height / 2
-    }
-
-    FileDialog {
-        id: dieFileDialog
-        title: "Please choose a mesh file"
-        nameFilters: ["All Files (*.*)","Mesh Files (*.pc)","STL Files (*.STL)","Word Files (*.docx)"]
-        onAccepted: {
-            console.log("You chose: " + dieFileDialog.currentFile)
-            selectedDieLabel.text = dieFileDialog.currentFile.toString().slice(dieFileDialog.currentFile.toString().lastIndexOf("/")+1) + qsTr(" selected")
-            if (edgeFileDialog.currentFile.toString() !== qsTr("")) nextButton.visible = true
-        }
-    }
-
-    FileDialog {
-        id: edgeFileDialog
-        title: "Please choose a mesh file"
-        nameFilters: ["All Files (*.*)","Mesh Files (*.pc)","STL Files (*.STL)","Word Files (*.docx)"]
-        onAccepted: {
-            console.log("You chose: " + edgeFileDialog.currentFile)
-            selectedEdgeLabel.text = edgeFileDialog.currentFile.toString().slice(edgeFileDialog.currentFile.toString().lastIndexOf("/")+1) + qsTr(" selected")
-            if (dieFileDialog.currentFile.toString() !== qsTr("")) nextButton.visible = true
-        }
     }
 
 
@@ -61,10 +39,10 @@ Item {
             anchors.topMargin: 0
         }
     }
-    
+
     Rectangle {
-        id: loadDieContent
-        height: (predictionsetup1item.height - titleBar.height - bottomNavBar.height)/2
+        id: selectMaterialContent
+        height: (predictionsetup3item.height - titleBar.height - bottomNavBar.height)/2
         color: "#ffffff"
         anchors.left: parent.left
         anchors.right: parent.right
@@ -73,8 +51,8 @@ Item {
         anchors.topMargin: 0
 
         Text {
-            id: loadDieTitle
-            text: qsTr("Load Die Mesh")
+            id: selectMaterialTitle
+            text: qsTr("Select Material")
             anchors.left: parent.left
             anchors.top: parent.top
             font.pixelSize: 12
@@ -82,35 +60,15 @@ Item {
             anchors.topMargin: 10
         }
 
-        Button {
-            id: loadDieutton
-            width: 80
-            text: qsTr("")
-            anchors.verticalCenter: loadDieTitle.verticalCenter
-            anchors.right: parent.right
-            anchors.rightMargin: 10
-            onClicked: dieFileDialog.open()
-
-            Text {
-                id: loadDieLabel
-                text: qsTr("Select File")
-                anchors.fill: parent
-                font.pixelSize: 12
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-        }
-
-        Text {
-            id: selectedDieLabel
-            width: loadDieContent.width - 20
-            text: qsTr("No file selected")
+        ComboBox {
+            id: selectMaterialDropdown
             anchors.left: parent.left
-            anchors.top: loadDieTitle.bottom
-            font.pixelSize: 12
-            wrapMode: Text.Wrap
+            anchors.right: parent.right
+            anchors.top: selectMaterialTitle.bottom
+            anchors.rightMargin: 10
             anchors.leftMargin: 10
             anchors.topMargin: 10
+            model: ["Aluminium","Steel"]
         }
 
 
@@ -118,19 +76,19 @@ Item {
     }
 
     Rectangle {
-        id: loadEdgeContent
+        id: selectProcessContent
         color: "#ffffff"
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.top: loadDieContent.bottom
+        anchors.top: selectMaterialContent.bottom
         anchors.bottom: bottomNavBar.top
         anchors.bottomMargin: 0
         anchors.topMargin: 0
         anchors.rightMargin: 0
 
         Text {
-            id: loadEdgeTitle
-            text: qsTr("Load Edge Mesh")
+            id: selectProcessTitle
+            text: qsTr("Select Stamping Type")
             anchors.left: parent.left
             anchors.top: parent.top
             font.pixelSize: 12
@@ -138,35 +96,15 @@ Item {
             anchors.topMargin: 10
         }
 
-        Button {
-            id: loadEdgeButton
-            width: 80
-            text: qsTr("")
-            anchors.verticalCenter: loadEdgeTitle.verticalCenter
-            anchors.right: parent.right
-            onClicked: edgeFileDialog.open()
-            anchors.rightMargin: 10
-
-            Text {
-                id: loadEdgeLabel
-                text: qsTr("Select File")
-                anchors.fill: parent
-                font.pixelSize: 12
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-        }
-
-        Text {
-            id: selectedEdgeLabel
-            width: loadEdgeContent.width - 20
-            text: qsTr("No file selected")
+        ComboBox {
+            id: selectProcessDropdown
             anchors.left: parent.left
-            anchors.top: loadEdgeTitle.bottom
-            font.pixelSize: 12
-            wrapMode: Text.Wrap
+            anchors.right: parent.right
+            anchors.top: selectProcessTitle.bottom
+            anchors.rightMargin: 10
             anchors.leftMargin: 10
             anchors.topMargin: 10
+            model: ["Cold Stamping"]
         }
     }
 
@@ -190,13 +128,13 @@ Item {
         Button {
             id: nextButton
             x: 398
-            visible: false
             text: qsTr("")
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
+            icon.color: "#ffffff"
             onClicked: {
-//                backend.loadPredictionMesh(dieFileDialog.currentFile.toString(), edgeFileDialog.currentFile.toString())
-                mainStack.replace("prediction_setup_2.qml")
+                backend.setMaterialandProcess(selectMaterialDropdown.currentValue, selectProcessDropdown.currentValue)
+                mainStack.replace("prediction_workspace.qml")
             }
             anchors.rightMargin: 10
 
@@ -219,7 +157,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             anchors.leftMargin: 10
-            onClicked: mainStack.replace("start_screen.qml")
+            onClicked: mainStack.replace("prediction_setup_2.qml")
 
             Text {
                 id: backButtonLabel
@@ -234,8 +172,10 @@ Item {
         }
     }
 
-
-
+    Connections {
+        target: backend
+    }
 }
+
 
 

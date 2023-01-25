@@ -3,12 +3,19 @@ import QtQuick.Window
 import QtQuick.Controls
 
 Item {
-//    id: window
-//    width: 800
-//    height: 600
+    id: predictionWorkspceItem
+    width: 800
+    height: 600
 //    color: "#eeeeee"
 //    visible: true
 //    title: qsTr("Hello World")
+
+    Component.onCompleted: {
+        window.width = width
+        window.height = height
+        window.x = Screen.width / 2 - width / 2
+        window.y = Screen.height / 2 - height / 2
+    }
 
     Rectangle {
         id: topBar
@@ -33,77 +40,6 @@ Item {
             anchors.bottomMargin: 0
             anchors.leftMargin: 0
             anchors.topMargin: 0
-        }
-
-        Button {
-            id: closeButton
-            width: 20
-            height: 20
-            anchors.right: parent.right
-            anchors.top: parent.top
-            rightPadding: 0
-            bottomPadding: 0
-            leftPadding: 0
-            topPadding: 0
-            display: AbstractButton.IconOnly
-            anchors.topMargin: 0
-            anchors.rightMargin: 0
-
-            Image {
-                id: closeButtonImage
-                anchors.fill: parent
-                source: "assets/closeButton.svg"
-                anchors.rightMargin: 3
-                anchors.leftMargin: 3
-                anchors.bottomMargin: 3
-                anchors.topMargin: 3
-                fillMode: Image.PreserveAspectFit
-            }
-        }
-
-        Button {
-            id: minimiseButton
-            width: 20
-            height: 20
-            text: qsTr("Button")
-            anchors.right: closeButton.left
-            anchors.top: parent.top
-            anchors.rightMargin: 0
-            anchors.topMargin: 0
-
-            Image {
-                id: minimiseButtonImage
-                anchors.fill: parent
-                source: "assets/minimiseButton.svg"
-                anchors.rightMargin: 3
-                anchors.leftMargin: 3
-                anchors.bottomMargin: 3
-                anchors.topMargin: 3
-                fillMode: Image.PreserveAspectFit
-            }
-        }
-
-        Button {
-            id: fullscreenButton
-            width: 20
-            height: 20
-            text: qsTr("Button")
-            anchors.right: minimiseButton.left
-            anchors.top: parent.top
-            icon.source: "/Users/alexlee/OneDrive - Imperial College London/Year 4/Masters/Qt/PyQt4/assets/fullscreenButton.svg"
-            anchors.rightMargin: 0
-            anchors.topMargin: 0
-
-            Image {
-                id: fullscreenButtonImage
-                anchors.fill: parent
-                source: "assets/fullscreenButton.svg"
-                anchors.rightMargin: 3
-                anchors.leftMargin: 3
-                anchors.bottomMargin: 3
-                anchors.topMargin: 3
-                fillMode: Image.PreserveAspectFit
-            }
         }
 
         Image {
@@ -163,7 +99,10 @@ Item {
             anchors.leftMargin: 0
             anchors.bottomMargin: 0
             anchors.topMargin: 0
-            onClicked: (modeMenu.visible == false) ? modeMenu.visible = true : modeMenu.visible = false
+            onClicked: {
+                modePopup.open()
+//                (modeMenu.visible == false) ? modeMenu.visible = true : modeMenu.visible = false
+            }
 
             Text {
                 id: modeButtonLabel
@@ -198,20 +137,16 @@ Item {
 
     }
 
-    Rectangle {
-        id: modeMenu
-        x: 0
+
+    Popup {
+        id: modePopup
         width: 110
         height: 150
-        color: "#ffffff"
-        border.width: 1
-        anchors.left: fileBar.left
-        anchors.top: fileBar.bottom
+//        anchors.left: fileBar.left
+//        anchors.top: fileBar.bottom
         focus: true
-        z: 1
-        anchors.leftMargin: fileButton.width
-        anchors.topMargin: 0
-        visible: true
+        dim: true
+        closePolicy: Popup.CloseOnPressOutside
 
         Text {
             id: modeLabel
@@ -304,6 +239,113 @@ Item {
             anchors.rightMargin: 0
         }
     }
+
+//    Rectangle {
+//        id: modeMenu
+//        x: 0
+//        width: 110
+//        height: 150
+//        color: "#ffffff"
+//        border.width: 1
+//        anchors.left: fileBar.left
+//        anchors.top: fileBar.bottom
+//        focus: true
+//        z: 1
+//        anchors.leftMargin: fileButton.width
+//        anchors.topMargin: 0
+//        visible: true
+
+//        Text {
+//            id: modeLabel
+//            text: qsTr("Mode")
+//            anchors.left: parent.left
+//            anchors.top: parent.top
+//            font.pixelSize: 12
+//            font.bold: true
+//            anchors.leftMargin: 5
+//            anchors.topMargin: 0
+//        }
+
+//        Button {
+//            id: predictionModeButton
+//            text: qsTr("Button")
+//            anchors.left: parent.left
+//            anchors.right: parent.right
+//            anchors.top: modeLabel.bottom
+//            anchors.rightMargin: 0
+//            anchors.leftMargin: 0
+//            anchors.topMargin: 0
+
+//            Text {
+//                id: predictionModeLabel
+//                text: qsTr("Quick Prediction")
+//                anchors.fill: parent
+//                font.pixelSize: 12
+//                verticalAlignment: Text.AlignVCenter
+//                anchors.leftMargin: 5
+//            }
+//        }
+
+//        Button {
+//            id: optimisationModeButton
+//            text: qsTr("Button")
+//            anchors.left: parent.left
+//            anchors.right: parent.right
+//            anchors.top: predictionModeButton.bottom
+//            anchors.rightMargin: 0
+//            anchors.leftMargin: 0
+//            onClicked: mainStack.replace("optimisation_workspace.qml")
+//            Text {
+//                id: optimisationModeLabel
+//                text: qsTr("Optimisation")
+//                anchors.fill: parent
+//                font.pixelSize: 12
+//                verticalAlignment: Text.AlignVCenter
+//                anchors.leftMargin: 5
+//            }
+//            anchors.topMargin: 0
+//        }
+
+//        Button {
+//            id: sensitivityModeButton
+//            text: qsTr("Button")
+//            anchors.left: parent.left
+//            anchors.right: parent.right
+//            anchors.top: optimisationModeButton.bottom
+//            anchors.rightMargin: 0
+//            anchors.leftMargin: 0
+//            onClicked: mainStack.replace("sensitivity_workspace.qml")
+//            Text {
+//                id: sensitivityModeLabel
+//                text: qsTr("Sensitivity")
+//                anchors.fill: parent
+//                font.pixelSize: 12
+//                verticalAlignment: Text.AlignVCenter
+//                anchors.leftMargin: 5
+//            }
+//            anchors.topMargin: 0
+//        }
+
+//        Button {
+//            id: developerModeButton
+//            text: qsTr("Button")
+//            anchors.left: parent.left
+//            anchors.right: parent.right
+//            anchors.top: sensitivityModeButton.bottom
+//            anchors.leftMargin: 0
+//            onClicked: mainStack.replace("developer_workspace.qml")
+//            Text {
+//                id: developerModeLabel
+//                text: qsTr("Developer")
+//                anchors.fill: parent
+//                font.pixelSize: 12
+//                verticalAlignment: Text.AlignVCenter
+//                anchors.leftMargin: 5
+//            }
+//            anchors.topMargin: 0
+//            anchors.rightMargin: 0
+//        }
+//    }
 
     Rectangle {
         id: parametersMenu
@@ -679,7 +721,7 @@ Item {
 
         Text {
             id: text1
-            text: qsTr("Current result type: ") + resultType.checkedButton.text
+            text: (resultType.checkedButton === null) ? qsTr("No result type selected") : qsTr("Current result type: ") + resultType.checkedButton.text
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: thinningButton.bottom
@@ -720,10 +762,10 @@ Item {
             function reload () {
                 counter = !counter
                 if (counter) {
-                    source = "thinningField1.png"
+                    source = "../temp/thinningField1.png"
                 }
                 else {
-                    source = "thinningField2.png"
+                    source = "../temp/thinningField2.png"
                 }
             }
         }

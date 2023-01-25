@@ -8,28 +8,14 @@ Item {
     width: 450
     height: 400
     Component.onCompleted: {
-        window.width = predictionsetup2item.width
-        window.height = predictionsetup2item.height }
-
-    FileDialog {
-        id: fileDialog
-        title: "Please choose a mesh file"
-        nameFilters: ["All Files (*.*)","Mesh Files (*.pc)","STL Files (*.STL)","Word Files (*.docx)"]
-        onAccepted: {
-            console.log("You chose: " + fileDialog.currentFile)
-            selectedfileLabel.text = fileDialog.currentFile.toString().slice(fileDialog.currentFile.toString().lastIndexOf("/")+1) + qsTr(" selected")
-//            Qt.quit()
-        }
-        onRejected: {
-            console.log("Canceled")
-//            Qt.quit()
-        }
-        //    Component.onCompleted: visible = true
-    }
+        window.width = width
+        window.height = height
+        window.x = Screen.width / 2 - width / 2
+        window.y = Screen.height / 2 - height / 2}
 
     Rectangle {
         id: titleBar
-        height: 50
+        height: 40
         color: "#e3e3e3"
         anchors.left: parent.left
         anchors.right: parent.right
@@ -40,11 +26,11 @@ Item {
 
         Text {
             id: titleLabel
-            text: qsTr("User-Centric Software to Assist Design for Forming")
+            text: qsTr("Quick Prediction Mode")
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            font.pixelSize: 18
+            font.pixelSize: 16
             verticalAlignment: Text.AlignVCenter
             anchors.bottomMargin: 0
             anchors.leftMargin: 10
@@ -53,71 +39,59 @@ Item {
     }
 
     Rectangle {
-        id: content
+        id: meshPreview
         color: "#ffffff"
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: titleBar.bottom
-        anchors.bottom: parent.bottom
+        anchors.bottom: bottomNavBar.top
         anchors.rightMargin: 0
         anchors.bottomMargin: 0
         anchors.topMargin: 0
 
+        Image {
+            id: image
+            anchors.verticalCenter: parent.verticalCenter
+            source: "../temp/imported_die.png"
+            anchors.horizontalCenter: parent.horizontalCenter
+            fillMode: Image.PreserveAspectFit
+        }
+
         Text {
-            id: loadmeshTitle
-            text: qsTr("Load Mesh")
+            id: meshPreviewTitle
+            text: qsTr("Mesh Preview")
             anchors.left: parent.left
             anchors.top: parent.top
             font.pixelSize: 12
             anchors.leftMargin: 10
             anchors.topMargin: 10
         }
+    }
 
-        Button {
-            id: loadmeshButton
-            width: 80
-            text: qsTr("")
-            anchors.verticalCenter: loadmeshTitle.verticalCenter
-            anchors.right: parent.right
-            anchors.rightMargin: 10
-            onClicked:{
-                console.log(fileDialog.currentFile)
-                fileDialog.open()
-        }
-
-            Text {
-                id: loadmeshLabel
-                text: qsTr("Select File")
-                anchors.fill: parent
-                font.pixelSize: 12
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-        }
-
-        Text {
-            id: selectedfileLabel
-            width: content.width - 20
-            text: qsTr("No file selected")
-            anchors.left: parent.left
-            anchors.top: loadmeshTitle.bottom
-            font.pixelSize: 12
-            wrapMode: Text.Wrap
-            anchors.leftMargin: 10
-            anchors.topMargin: 10
-        }
+    Rectangle {
+        id: bottomNavBar
+        height: 30
+        color: "#e3e3e3"
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.rightMargin: 0
+        anchors.leftMargin: 0
+        anchors.bottomMargin: 0
 
         Button {
             id: nextButton
-            text: qsTr("Button")
+            x: 398
+            text: qsTr("")
+            anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
-            anchors.bottom: parent.bottom
+            onClicked: mainStack.replace("prediction_setup_3.qml")
             anchors.rightMargin: 10
-            anchors.bottomMargin: 10
-            onClicked: mainStack.replace("prediction_setup2.qml")
 
             Text {
                 id: nextButtonLabel
+                x: 398
+                y: 130
                 text: qsTr("Next")
                 anchors.fill: parent
                 font.pixelSize: 12
@@ -128,19 +102,23 @@ Item {
 
         Button {
             id: backButton
-            text: qsTr("Button")
+            x: 10
+            text: qsTr("")
+            anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
-            anchors.bottom: parent.bottom
             anchors.leftMargin: 10
+            onClicked: mainStack.replace("prediction_setup_1.qml")
+
             Text {
                 id: backButtonLabel
+                x: 10
+                y: 130
                 text: qsTr("Back")
                 anchors.fill: parent
                 font.pixelSize: 12
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
-            anchors.bottomMargin: 10
         }
     }
 

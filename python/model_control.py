@@ -308,8 +308,11 @@ model = model.to(device)
 
 
 def selectMaterialandProcess (material, process):
+    '''Changes model directory based on the model for specific material and process. Takes material and process as strings.'''
 
     global model_dir
+
+    model_dir = "python/CarDoorModel"
 
     material = str(material).lower()
     process = str(process).lower()
@@ -320,13 +323,13 @@ def selectMaterialandProcess (material, process):
     model_dir = os.path.join(model_dir, material+"_"+process)
 
 
-def load(type):
-    '''Loads the thinning field model. Takes no arguments and returns the loaded model object.'''
+def load (type):
+    '''Chooses which model to load based on predictor. Options are "Thinning", "Displacement", or "Stress". Takes the model type as a string.'''
 
     global model, model_dir
 
     type = str(type).lower()
-    model_dir = model_dir + "_" + type
+    # model_dir = model_dir + "_" + type
 
 #    if type == "Thinning":
 #        print("thinning model loaded")
@@ -343,15 +346,13 @@ def load(type):
 #        model.load_state_dict(torch.load(model_dir,map_location=device))
 #        model.eval()
 
-    print(type + " model loaded")
-    model.load_state_dict(torch.load(model_dir,map_location=device))
+    model.load_state_dict(torch.load(model_dir + "_" + type, map_location=device))
     model.eval()
-
-    return model
+    print(type + " model loaded")
 
 
 def predict(input):
-    '''Returns predicted array given an input array and the loaded model object.'''
+    '''Returns predicted array (2x256x384) given an input array (5x256x384).'''
 
     # print(input.shape)
 

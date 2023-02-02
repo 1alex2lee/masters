@@ -2,8 +2,8 @@
 from python import die
 
 def predictionmesh (die_dir, edge_dir):
-    print("die directory is " + die_dir)
-    print("edge direcotry is " + edge_dir)
+    # print("die directory is " + die_dir)
+    # print("edge direcotry is " + edge_dir)
 
     die.load(die_dir, edge_dir)
 
@@ -14,3 +14,12 @@ def materialandprocess (material, process):
         print("steel selected")
     if process == "Cold Stamping":
         print("cold stamping selected")
+
+def optivaropts ():
+    return (["python","python1","python2"])
+
+def independentvars ():
+    return (["sensitivity","independent","variables"])
+
+def dependentvars ():
+    return (["sensitivity","dependent","variables"])

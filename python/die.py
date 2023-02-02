@@ -3,6 +3,9 @@ import os
 import re #for splitting strings
 import meshio
 from scipy.interpolate import griddata
+import matplotlib.pyplot as plt
+
+import main
 
 #paths
 dieImagesPath = ""
@@ -73,8 +76,8 @@ def is_in_poly(p, poly):
                 is_in = not is_in
     return is_in
 
-def postprocess(i, file, edgefile, baseLength_W, baseLength_H, imageResolution_W, imageResolution_H):
-    print("-> DIE START", file, "\n")
+def postprocess(i, file, edgefile, baseLength_W, baseLength_H, imageResolution_W, imageResolution_H, zoom:bool):
+    print("-> DIE START", file, "\n", "zoom ", zoom)
 
     # load the mesh
     fileName = dieImagesPath + file
@@ -85,8 +88,12 @@ def postprocess(i, file, edgefile, baseLength_W, baseLength_H, imageResolution_W
     mesh.points[:, 2] = -1 * mesh.points[:, 2]
 
     # interpolate to grid
-    X = np.linspace(0, baseLength_H, imageResolution_H)
-    Y = np.linspace(0, baseLength_W, imageResolution_W)
+    if zoom:
+        X = np.linspace(790, baseLength_H, imageResolution_H)
+        Y = np.linspace(-460, baseLength_W, imageResolution_W)
+    else:
+        X = np.linspace(0, baseLength_H, imageResolution_H)
+        Y = np.linspace(0, baseLength_W, imageResolution_W)
     gridX, gridY = np.meshgrid(X, Y)
     dieImage = np.ones((imageResolution_W, imageResolution_H))
 
@@ -144,7 +151,7 @@ def postprocess(i, file, edgefile, baseLength_W, baseLength_H, imageResolution_W
 
     print("-> DIE DONE", file, "\n")
 
-    return i, dieImage
+    return dieImage
 
 
 def load(die_dir, edge_dir):
@@ -152,8 +159,11 @@ def load(die_dir, edge_dir):
     # sortedFiles = sortFiles(dieImagesPath, '.nas')
     # edgeFiles = sortedgeFiles(Edges_dir, 'Die.nas')
 
-    sortedFiles = die_dir[5:]
-    edgeFiles = edge_dir[5:]
+    sortedFiles = die_dir[7:]
+    edgeFiles = edge_dir[7:]
+
+    print("die dir: ",sortedFiles)
+    print("edge dir: ",edgeFiles)
 
     # fixed parameters
     # imageResolution_H = [384 for i in range(len(sortedFiles))]
@@ -163,16 +173,20 @@ def load(die_dir, edge_dir):
 
     imageResolution_H = 384
     imageResolution_W = 256
-    baseLength_H = 1090  # in mm
-    baseLength_W = -660  # in mm
+    # baseLength_H = 1090  # in mm
+    # baseLength_W = -660  # in mm
 
     # obtain die images
-    dieImages = np.zeros((imageResolution_W, imageResolution_H))
+    # dieImages = np.zeros((imageResolution_W, imageResolution_H))
 
     # with concurrent.futures.ProcessPoolExecutor(max_workers = 10) as executor:
     #     for i, dieImage in executor.map(postprocess, 1, sortedFiles, edgeFiles, baseLength_W, baseLength_H, imageResolution_W, imageResolution_H):
     #         dieImages[i, :, :] = dieImage
 
-    i, dieImage = postprocess (0, sortedFiles, edgeFiles, baseLength_W, baseLength_H, imageResolution_W, imageResolution_H)
+    dieImage = postprocess (0, sortedFiles, edgeFiles, -660, 1090, imageResolution_W, imageResolution_H, zoom=False)
+    dieImage_zoom = postprocess (0, sortedFiles, edgeFiles, -660, 1090, imageResolution_W, imageResolution_H, zoom=True)
 
-    np.save(os.path.join("temp","imported_die.npy"), dieImage)
+    np.save(os.path.join("temp","input_1.npy"), dieImage)
+    np.save(os.path.join("temp","input_2.npy"), dieImage_zoom)
+
+    plt.imsave(os.path.join("temp","input_1.png"), dieImage)

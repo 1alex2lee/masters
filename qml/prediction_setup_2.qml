@@ -82,43 +82,21 @@ Item {
         Button {
             id: nextButton
             x: 398
-            text: qsTr("")
+            text: qsTr("Next")
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
             onClicked: mainStack.replace("prediction_setup_3.qml")
             anchors.rightMargin: 10
-
-            Text {
-                id: nextButtonLabel
-                x: 398
-                y: 130
-                text: qsTr("Next")
-                anchors.fill: parent
-                font.pixelSize: 12
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
         }
 
         Button {
             id: backButton
             x: 10
-            text: qsTr("")
+            text: qsTr("Back")
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             anchors.leftMargin: 10
             onClicked: mainStack.replace("prediction_setup_1.qml")
-
-            Text {
-                id: backButtonLabel
-                x: 10
-                y: 130
-                text: qsTr("Back")
-                anchors.fill: parent
-                font.pixelSize: 12
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
         }
     }
 

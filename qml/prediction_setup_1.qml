@@ -84,21 +84,11 @@ Item {
 
         Button {
             id: loadDieutton
-            width: 80
-            text: qsTr("")
+            text: qsTr("Select File")
             anchors.verticalCenter: loadDieTitle.verticalCenter
             anchors.right: parent.right
             anchors.rightMargin: 10
             onClicked: dieFileDialog.open()
-
-            Text {
-                id: loadDieLabel
-                text: qsTr("Select File")
-                anchors.fill: parent
-                font.pixelSize: 12
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
         }
 
         Text {
@@ -140,21 +130,11 @@ Item {
 
         Button {
             id: loadEdgeButton
-            width: 80
-            text: qsTr("")
+            text: qsTr("Select File")
             anchors.verticalCenter: loadEdgeTitle.verticalCenter
             anchors.right: parent.right
             onClicked: edgeFileDialog.open()
             anchors.rightMargin: 10
-
-            Text {
-                id: loadEdgeLabel
-                text: qsTr("Select File")
-                anchors.fill: parent
-                font.pixelSize: 12
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
         }
 
         Text {
@@ -169,7 +149,6 @@ Item {
             anchors.topMargin: 10
         }
     }
-
 
     Connections {
         target: backend
@@ -191,7 +170,7 @@ Item {
             id: nextButton
             x: 398
             visible: false
-            text: qsTr("")
+            text: qsTr("Next")
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
             onClicked: {
@@ -199,43 +178,18 @@ Item {
                 mainStack.replace("prediction_setup_2.qml")
             }
             anchors.rightMargin: 10
-
-            Text {
-                id: nextButtonLabel
-                x: 398
-                y: 130
-                text: qsTr("Next")
-                anchors.fill: parent
-                font.pixelSize: 12
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
         }
 
         Button {
             id: backButton
             x: 10
-            text: qsTr("")
+            text: qsTr("Back")
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             anchors.leftMargin: 10
             onClicked: mainStack.replace("start_screen.qml")
-
-            Text {
-                id: backButtonLabel
-                x: 10
-                y: 130
-                text: qsTr("Back")
-                anchors.fill: parent
-                font.pixelSize: 12
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
         }
     }
-
-
-
 }
 
 

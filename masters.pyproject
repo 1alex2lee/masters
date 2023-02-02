@@ -1,14 +1,27 @@
 {
     "files": [
         "main.qml",
-        "qml/optimisation_workspace.qml",
+        "qml/start_screen.qml",
+
         "qml/prediction_setup_1.qml",
-        "qml/developer_workspace.qml",
-        "qml/prediction_workspace.qml",
-        "qml/sensitivity_workspace.qml",
         "qml/prediction_setup_2.qml",
         "qml/prediction_setup_3.qml",
-        "qml/start_screen.qml",
+        "qml/prediction_workspace.qml",
+
+        "qml/optimisation_setup_1.qml",
+        "qml/optimisation_setup_2.qml",
+        "qml/optimisation_setup_3.qml",
+        "qml/optimisation_setup_4.qml",
+        "qml/optimisation_setup_5.qml",
+        "qml/optimisation_workspace.qml",
+        "qml/optimisation_workspace_allruns.qml",
+
+        "qml/sensitivity_setup_1.qml",
+        "qml/sensitivity_setup_2.qml",
+        "qml/sensitivity_setup_3.qml",
+        "qml/sensitivity_workspace.qml",
+
+        "qml/developer_workspace.qml",
 
         "main.py",
         "python/refresh.py",

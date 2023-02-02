@@ -53,7 +53,7 @@ Item {
         Button {
             id: predictionButton
             width: container.width/3
-            text: qsTr("")
+            text: qsTr("Quick Prediction")
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom
@@ -61,52 +61,32 @@ Item {
             anchors.leftMargin: 0
             anchors.topMargin: 0
             onClicked: mainStack.replace("prediction_setup_1.qml")
-
-            Text {
-                id: predictionLabel
-                text: qsTr("Quick Prediction")
-                anchors.fill: parent
-                font.pixelSize: 12
-                verticalAlignment: Text.AlignVCenter
-            }
         }
 
         Button {
             id: optimisationButton
             width: container.width/3
-            text: qsTr("")
+            text: qsTr("Optimisation")
             anchors.left: predictionButton.right
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             anchors.topMargin: 0
             anchors.leftMargin: 0
-            Text {
-                id: optimisationLabel
-                text: qsTr("Optimisation")
-                anchors.fill: parent
-                font.pixelSize: 12
-                verticalAlignment: Text.AlignVCenter
-            }
+            onClicked: mainStack.replace("optimisation_setup_1.qml")
             anchors.bottomMargin: 0
         }
 
         Button {
             id: sensitivityButton
             width: container.width/3
-            text: qsTr("")
+            text: qsTr("Sensitivity Analysis")
             anchors.left: optimisationButton.right
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             anchors.topMargin: 0
             anchors.leftMargin: 0
-            Text {
-                id: sensitivityLabel
-                text: qsTr("Sensitivity Analysis")
-                anchors.fill: parent
-                font.pixelSize: 12
-                verticalAlignment: Text.AlignVCenter
-            }
             anchors.bottomMargin: 0
+            onClicked: mainStack.replace("sensitivity_setup_1.qml")
         }
     }
 

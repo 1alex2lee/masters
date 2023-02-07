@@ -68,7 +68,7 @@ Item {
             anchors.rightMargin: 10
             anchors.leftMargin: 10
             anchors.topMargin: 10
-            model: ["Aluminium","Steel"]
+            model: backend.load_materials()
         }
 
 
@@ -104,7 +104,7 @@ Item {
             anchors.rightMargin: 10
             anchors.leftMargin: 10
             anchors.topMargin: 10
-            model: ["Cold Stamping"]
+            model: backend.load_processes()
         }
     }
 

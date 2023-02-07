@@ -70,7 +70,7 @@ Window {
 //            setSortingEnabled: true
 //            alternatingRows: True
 //            selectionBehavior: TableView.SelectRows
-        onActivated: {console.log(bestrunsTable.columnCount)}
+//        onActivated: {console.log(bestrunsTable.columnCount)}
         Component.onCompleted: (
             console.log(bestrunsTable.columnCount))
         delegate: Rectangle {

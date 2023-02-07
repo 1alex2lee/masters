@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
+import QtCharts
 
 Item {
     id: optimisationWorkspceItem
@@ -46,7 +47,7 @@ Item {
 
     Rectangle {
         id: bestrunContent
-        height: 200
+        height: 100
         color: "#ffffff"
         anchors.left: parent.left
         anchors.right: parent.right
@@ -73,11 +74,11 @@ Item {
             anchors.top: parent.top
             anchors.rightMargin: 10
             anchors.topMargin: 5
-            Component.onCompleted: {
-                var component = Qt.createComponent("optimisation_workspace_allruns.qml")
-                var new_window    = component.createObject(window)
-                new_window.show()
-            }
+//            Component.onCompleted: {
+//                var component = Qt.createComponent("optimisation_workspace_allruns.qml")
+//                var new_window    = component.createObject(window)
+//                new_window.show()
+//            }
 
             onClicked: {
                 var component = Qt.createComponent("optimisation_workspace_allruns.qml")
@@ -123,7 +124,57 @@ Item {
 
     Connections {
         target: backend
-
+//        function onOpti_result_updated (idx, x, y) {
+//            progressLine.insert(idx, x, y)
+//        }
     }
+
+    Rectangle {
+        id: chartContent
+        color: "#ffffff"
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: bestrunContent.bottom
+        anchors.bottom: parent.bottom
+        anchors.topMargin: 0
+
+        ChartView {
+            anchors.fill: parent
+            title: "Goal Value over Runs"
+            antialiasing: true
+
+            LineSeries {
+                id: goaloverrunsline
+                axisX: ValueAxis {
+                    id: x_axis
+                    tickInterval: 2
+                    tickType: ValueAxis.TicksDynamic
+                }
+                axisY: ValueAxis { id: y_axis }
+            }
+
+            Component.onCompleted: {
+                var goaloverruns = backend.get_opti_final_graph()
+//                console.log(goaloverruns)
+                for (var run in goaloverruns) {
+                    console.log(goaloverruns[run][1])
+                    goaloverrunsline.append(goaloverruns[run][0],goaloverruns[run][1])
+
+                    x_axis.max = goaloverruns[run][0]
+
+                    if (goaloverruns[run][1] > y_axis.max) {
+                        y_axis.max = goaloverruns[run][1]*1.1
+                    }
+                }
+            }
+        }
+    }
+
+//    Timer {
+//        interval: 1000; running: true; repeat: true
+//        onTriggered: {
+//            backend.update_opti_graph()
+//        }
+//    }
 
 }

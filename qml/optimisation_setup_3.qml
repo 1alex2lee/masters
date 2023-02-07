@@ -66,12 +66,12 @@ Item {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: selectvariableLabel.bottom
-            anchors.bottom: parent.bottom
+            anchors.bottom: renameVariableButton.top
             anchors.bottomMargin: 10
             anchors.rightMargin: 10
             anchors.leftMargin: 10
             anchors.topMargin: 10
-            model: backend.load_optivaropts
+            model: backend.load_opti_varopts()
 
             ButtonGroup {
                 id: selectedvariables
@@ -83,6 +83,7 @@ Item {
                 text: model.modelData
                 anchors.left: parent.left
                 anchors.leftMargin: 10
+                enabled: backend.enable_opti_vars(text, modelDropdown.currentValue)
                 onClicked: {
                     if (checked) {
                         backend.pick_optivar(text)
@@ -92,8 +93,20 @@ Item {
                 }
             }
         }
-    }
 
+        Button {
+            id: renameVariableButton
+            text: qsTr("Rename Variables")
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottomMargin: 10
+            onClicked: {
+                var component = Qt.createComponent("optimisation_setup_3_rename.qml")
+                var new_window    = component.createObject(window)
+                new_window.show()
+            }
+        }
+    }
 
     Rectangle {
         id: optionsContent
@@ -108,8 +121,8 @@ Item {
         anchors.topMargin: 0
 
         Text {
-            id: materialLabel
-            text: qsTr("Material")
+            id: modelLabel
+            text: qsTr("Model")
             anchors.left: parent.left
             anchors.top: parent.top
             font.pixelSize: 12
@@ -118,12 +131,31 @@ Item {
         }
 
         ComboBox {
+            id: modelDropdown
+            width: 140
+            anchors.verticalCenter: modelLabel.verticalCenter
+            anchors.right: parent.right
+            anchors.rightMargin: 10
+            model: backend.load_modeltypes()
+        }
+
+        Text {
+            id: materialLabel
+            text: qsTr("Material")
+            anchors.left: parent.left
+            anchors.top: modelLabel.bottom
+            font.pixelSize: 12
+            anchors.leftMargin: 10
+            anchors.topMargin: 10
+        }
+
+        ComboBox {
             id: materialDropdown
             width: 140
             anchors.verticalCenter: materialLabel.verticalCenter
             anchors.right: parent.right
             anchors.rightMargin: 10
-            model: ["Aluminium","Steel"]
+            model: backend.load_materials()
         }
 
         Text {
@@ -142,33 +174,14 @@ Item {
             anchors.verticalCenter: processLabel.verticalCenter
             anchors.right: parent.right
             anchors.rightMargin: 10
-            model: ["Hot Stamping","Cold Stamping"]
-        }
-
-        Text {
-            id: modelLabel
-            text: qsTr("Model")
-            anchors.left: parent.left
-            anchors.top: processLabel.bottom
-            font.pixelSize: 12
-            anchors.topMargin: 10
-            anchors.leftMargin: 10
-        }
-
-        ComboBox {
-            id: modelDropdown
-            width: 140
-            anchors.verticalCenter: modelLabel.verticalCenter
-            anchors.right: parent.right
-            anchors.rightMargin: 10
-            model: ["Thinning","Displacement","Stress"]
+            model: backend.load_processes()
         }
 
         Text {
             id: goalLabel
             text: qsTr("Goal Variable")
             anchors.left: parent.left
-            anchors.top: modelLabel.bottom
+            anchors.top: processLabel.bottom
             font.pixelSize: 12
             anchors.topMargin: 10
             anchors.leftMargin: 10
@@ -317,6 +330,9 @@ Item {
     }
     Connections {
         target: backend
+        function onOpti_var_name_changed() {
+            selectvariableList.model = backend.load_opti_varopts()
+        }
     }
 }
 

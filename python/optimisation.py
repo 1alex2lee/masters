@@ -1,5 +1,5 @@
 
-import threading, time, random, os
+import threading, time, random, os, json
 import pandas as pd
 import numpy as np
 
@@ -7,24 +7,53 @@ from PySide6.QtCore import QAbstractTableModel, QModelIndex, Qt, Property, Slot
 
 from python import model_control
 
-all_vars = ["Force","Velocity","Blank Thickness","Temperature"]
-picked_vars = ["picked1","picked2"]
-units_library = {"force":"kN","velocity":'mm/s',"blank thickness":"mm","temperature":"°C"}
+with open('info.json') as f:
+    info = json.load(f)
+
+    all_vars = []
+    for model in info["models"]:
+        for input in model["inputs"]:
+            if input["name"] not in all_vars:
+                all_vars.append(input["name"])
+        for output in model["outputs"]:
+            if output["name"] not in all_vars:
+                all_vars.append(output["name"])
+
+# all_vars = ["Thinning","Springback","Strain","Force","Velocity","Blank Thickness","Temperature"]
+picked_vars = ["thinning input 1","thinning input 2"]
+units_library = ["%","%","%","kN","mm/s","mm","°C"]
 units = []
 bounds = {}
 options = []
 progress = 0
 runsno = 0
 best_output = 0
+current_output = 0
 all_runs = {}
 bestrun = []
 stop_requested = False
 
 
-def load_optivars ():
+def load_varopts ():
     global all_vars
 
+    print("variable options for requested")
     return all_vars
+
+
+def enable_vars (var_name, model_type):
+    with open('info.json') as f:
+        info = json.load(f)
+
+        for model in info["models"]:
+            if model["name"] == model_type:
+                for input in model["inputs"]:
+                    if input["name"] == var_name:
+                        return True
+                for output in model["outputs"]:
+                    if output["name"] == var_name:
+                        return True
+        return False
 
 
 def pick_option (option):
@@ -47,7 +76,7 @@ def unpick_option (option):
 def set_options (material, process, model, goal, aim, setto, search, runsno):
     global options
 
-    options = [goal.lower(), aim.lower(), setto, search, runsno]
+    options = [goal.lower(), aim.lower(), setto, search, runsno, model]
     print("options set: ",material, process, model, goal, aim, setto, search, runsno)
 
     model_control.selectMaterialandProcess(material, process)
@@ -60,17 +89,46 @@ def picked_optivars ():
     return picked_vars
 
 
-def get_units (var, idx):
-    global units, units_library
+def get_var_property (var, property):
+    global options
 
-    var = str(var).lower()
-    print("units requested for",var)
-    if var in units_library:
-        units.append([units_library[var]])
-        return units
-    else:
-        units.append([""])
-        return units
+    model_type = options[5]
+
+    with open('info.json') as f:
+        info = json.load(f)
+
+        for model in info["models"]:
+            if model["name"] == model_type:
+                for input in model["inputs"]:
+                    if input["name"] == var:
+                        return input[property]
+                
+                for output in model["outputs"]:
+                    if output["name"] == var:
+                        return output[property]
+                    
+    
+def change_name (idx, old, new):
+    global all_vars
+
+    all_vars[idx] = new
+
+    with open('info.json') as f:
+        info = json.load(f)
+
+    for model in info["models"]:
+        for input in model["inputs"]:
+            if input["name"] == old:
+                input["name"] = new
+        for output in model["outputs"]:
+            if output["name"] == old:
+                output["name"] = new
+    
+    with open('info.json', "w+") as f:
+        f.write(json.dumps(info, indent=2))
+
+    print("name change from ",old," to ",all_vars[idx])
+    
 
 
 def set_bounds (var, lower, upper, unit):
@@ -93,7 +151,7 @@ def stop ():
 
 
 def optimise (bounds, options):
-    global progress, runsno, picked_vars, bestrun, best_output, all_runs, stop_requested
+    global progress, runsno, picked_vars, bestrun, best_output, current_output, all_runs, stop_requested
 
     print("optimisation started")
     goal, aim, setto, search, runsno = options[0], options[1], options[2], options[3], options[4]
@@ -108,42 +166,49 @@ def optimise (bounds, options):
     while progress < runsno:
 
         if stop_requested:
+            all_runs_df = pd.DataFrame(all_runs)
+            all_runs_df.to_csv(os.path.join("temp","optimisation_result.csv"))
             print("optimisation stopped")
             break
 
         progress += 1
-        output = random.random()
+        current_output = random.random()
 
         for var in picked_vars:
            all_runs[var].append(random.randint(bounds[var][0],bounds[var][1]))
+
         #    var_list = all_runs[var]
         #    var_list.append(random.randint(bounds[var][0],bounds[var][1]))
         #    all_runs[var] = var_list
 
         goal_list = all_runs[goal_column]
-        goal_list.append(output)
+        goal_list.append(current_output)
         all_runs[goal_column] = goal_list
 
-        print(all_runs)
+        # print(all_runs)
 
-        if output > best_output:
+        if current_output > best_output:
             bestrun = []
-            best_output = output
+            best_output = current_output
 
             for var in all_runs:
                 bestrun.append([var, all_runs[var][-1]])
 
-        time.sleep(0.11)
+        time.sleep(2)
 
     all_runs_df = pd.DataFrame(all_runs)
     all_runs_df.to_csv(os.path.join("temp","optimisation_result.csv"))
 
 
 def get_progress ():
-    global progress, runsno
+    global progress, runsno, current_output
     
-    # print(progress," out of ",runsno)
-    return [progress, runsno]
+    print(progress," out of ",runsno, "current value ",round(current_output,2))
+    return [progress, runsno, current_output]
+
+
+def update_graph ():
+    return random.randint(1,20), random.randint(1,20), random.random()
 
 
 def getbestrun ():
@@ -199,6 +264,14 @@ def get_final_vars ():
             vars.append(column)
 
     return vars
+
+
+def get_final_graph ():
+    all_runs = np.genfromtxt(os.path.join("temp","optimisation_result.csv"), delimiter=',')
+
+    final = [ [i,float(run[-1])] for i,run in enumerate(all_runs) ]
+    return final
+
 
 
 

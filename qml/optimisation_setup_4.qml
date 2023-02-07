@@ -149,23 +149,33 @@ Item {
                     anchors.topMargin: 0
                 }
 
-                SpinBox {
+                TextField {
                     id: varlowerbound
-                    width: varboundRow.width/4
-                    editable: true
+                    selectByMouse: true
+                    text: backend.get_optivar_lowerbound(varboundLabel.text)
+                    validator: DoubleValidator {
+                        bottom: parseFloat(backend.get_optivar_lowerbound(varboundLabel.text))
+                        top: parseFloat(backend.get_optivar_upperbound(varboundLabel.text))
+                        decimals: backend.get_optivar_decimals(varboundLabel.text)
+                    }
                     anchors.verticalCenter: varboundLabel.verticalCenter
                     anchors.left: varboundLabel.right
-                    onValueModified: backend.setvarbounds(varboundLabel.text, varlowerbound.value, varupperbound.value, unitDropdown.currentValue)
+                    onTextEdited: backend.setvarbounds(varboundLabel.text, parseFloat(varlowerbound.text), parseFloat(varupperbound.text), unitDropdown.currentValue)
                 }
 
-                SpinBox {
+                TextField {
                     id: varupperbound
                     width: varboundRow.width/4
-                    editable: true
-                    value: 99
+                    selectByMouse: true
+                    text: parseFloat(backend.get_optivar_upperbound(varboundLabel.text))
+                    validator:  DoubleValidator {
+                        bottom: parseFloat(backend.get_optivar_lowerbound(varboundLabel.text))
+                        top: parseFloat(backend.get_optivar_upperbound(varboundLabel.text))
+                        decimals: parseInt(backend.get_optivar_decimals(varboundLabel.text))
+                    }
                     anchors.verticalCenter: varboundLabel.verticalCenter
                     anchors.left: varlowerbound.right
-                    onValueModified: backend.setvarbounds(varboundLabel.text, varlowerbound.value, varupperbound.value, unitDropdown.currentValue)
+                    onTextEdited: backend.setvarbounds(varboundLabel.text, parseFloat(varlowerbound.text), parseFloat(varupperbound.text), unitDropdown.currentValue)
                 }
 
                 ComboBox {
@@ -174,8 +184,8 @@ Item {
                     anchors.verticalCenter: varboundLabel.verticalCenter
                     anchors.left: varupperbound.right
                     anchors.leftMargin: 0
-                    model: backend.get_optivar_units(varboundLabel.text, index)[index]
-                    onActivated: backend.setvarbounds(varboundLabel.text, varlowerbound.value, varupperbound.value, unitDropdown.currentValue)
+                    model: backend.get_optivar_units(varboundLabel.text)
+//                    onActivated: backend.setvarbounds(varboundLabel.text, parseFloat(varlowerbound.text), parseFloat(varupperbound.text), unitDropdown.currentValue)
                 }
                 anchors.rightMargin: 10
                 anchors.topMargin: 0

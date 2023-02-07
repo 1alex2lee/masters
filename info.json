@@ -1,0 +1,149 @@
+{
+  "models": [
+    {
+      "name": "Thinning",
+      "inputs": [
+        {
+          "name": "thinning input 1",
+          "units": ["kN"],
+          "lower bound": 2,
+          "upper bound": 100,
+          "decimals": 0
+        },
+        {
+          "name": "thinning input 2",
+          "units": ["mm/s"],
+          "lower bound": 0.1,
+          "upper bound": 5,
+          "decimals": 1
+        },
+        {
+          "name": "thinning input 3",
+          "units": ["\u00b0C"],
+          "lower bound": 300,
+          "upper bound": 600,
+          "decimals": 0
+        }
+      ],
+      "outputs": [
+        {
+          "name": "thinning output 1",
+          "units": ["kN"],
+          "lower bound": 2,
+          "upper bound": 100,
+          "decimals": 0
+        },
+        {
+          "name": "thinning output 2",
+          "units": ["mm/s"],
+          "lower bound": 0.1,
+          "upper bound": 5,
+          "decimals": 1
+        }
+      ]
+    },
+    {
+      "name": "Springback",
+      "inputs": [
+        {
+          "name": "sprinback input 1",
+          "units": ["kN"],
+          "lower bound": 2,
+          "upper bound": 100,
+          "decimals": 0
+        },
+        {
+          "name": "sprinback input 2",
+          "units": ["mm/s"],
+          "lower bound": 0.1,
+          "upper bound": 5,
+          "decimals": 1
+        },
+        {
+          "name": "sprinback input 3",
+          "units": ["\u00b0C"],
+          "lower bound": 300,
+          "upper bound": 600,
+          "decimals": 0
+        }
+      ],
+      "outputs": [
+        {
+          "name": "sprinback output 1",
+          "units": ["kN"],
+          "lower bound": 2,
+          "upper bound": 100,
+          "decimals": 0
+        },
+        {
+          "name": "sprinback output 2",
+          "units": ["mm/s"]
+        }
+      ]
+    },
+    {
+      "name": "Strain",
+      "inputs": [
+        {
+          "name": "strain input 1",
+          "units": ["kN"],
+          "lower bound": 2,
+          "upper bound": 100,
+          "decimals": 0
+        },
+        {
+          "name": "strain input 2",
+          "units": ["mm/s"],
+          "lower bound": 0.1,
+          "upper bound": 5,
+          "decimals": 1
+        },
+        {
+          "name": "strain input 3",
+          "units": ["\u00b0C"],
+          "lower bound": 300,
+          "upper bound": 600,
+          "decimals": 0
+        }
+      ],
+      "outputs": [
+        {
+          "name": "strain output 1",
+          "units": ["kN"],
+          "lower bound": 2,
+          "upper bound": 100,
+          "decimals": 0
+        },
+        {
+          "name": "strain output 2",
+          "units": ["mm/s"],
+          "lower bound": 0.1,
+          "upper bound": 5,
+          "decimals": 1
+        }
+      ]
+    }
+  ],
+  "materials": [
+    {
+      "name": "Aluminium"
+    },
+    {
+      "name": "Steel"
+    },
+    {
+      "name": "Titanium"
+    }
+  ],
+  "processes": [
+    {
+      "name": "Cold Stamping"
+    },
+    {
+      "name": "Hot Stamping"
+    },
+    {
+      "name": "Room Temperature Stamping"
+    }
+  ]
+}

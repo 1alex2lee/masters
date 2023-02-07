@@ -11,6 +11,7 @@
         "qml/optimisation_setup_1.qml",
         "qml/optimisation_setup_2.qml",
         "qml/optimisation_setup_3.qml",
+        "qml/optimisation_setup_3_rename.qml",
         "qml/optimisation_setup_4.qml",
         "qml/optimisation_setup_5.qml",
         "qml/optimisation_workspace.qml",

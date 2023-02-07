@@ -3,28 +3,82 @@ import sys, os
 from pathlib import Path
 import pandas as pd
 
-from PySide6.QtGui import QGuiApplication
+from PySide6.QtWidgets import QApplication
 from PySide6.QtQml import QQmlApplicationEngine, qmlRegisterSingletonType
 from PySide6.QtCore import QObject, Slot, Signal, Property, QSortFilterProxyModel, Qt
 
-from python import refresh, model_control, load, optimisation
+from python import refresh, model_control, load, optimisation, prediction
 
 class MainWindow(QObject):
     def __init__(self):
         QObject.__init__(self)
 
+
+
+    @Slot(str, str)
+    def loadPredictionMesh (self, die, edge):
+        load.predictionmesh(die, edge)
+
+
+    @Slot(result=list)
+    def load_materials (self):
+        return load.materials()
+    
+
+    @Slot(result=list)
+    def load_processes (self):
+        return load.processes()
+    
+
+    @Slot(result=list)
+    def load_modeltypes (self):
+        return load.modeltypes()
+
+
+    @Slot(str, str)
+    def setMaterialandProcess (self, material, process):
+        model_control.selectMaterialandProcess(material, process)
+
+
+
+
+    @Slot(str, result=list)
+    def get_pred_parameters (self, str):
+        return load.model_inputs(str)
+    
+
+    @Slot(str, str, result=str)
+    def get_pred_parameter_units (self, model, parameter):
+        return load.model_input_units(model, parameter)
+    
+
+    @Slot(str, result=list)
+    def get_pred_metrics (self, str):
+        # return prediction.metrics(str)
+        return load.model_outputs(str)
+    
+
+    @Slot(str, result=str)
+    def get_pred_result (self, str):
+        return prediction.update_result(str)
+    
+
+
+
     update = Signal(float)
-    @Slot(float, float, float, float)
-    def updateParameters (self, force, velocity, blankthickness, temperature):
+    @Slot(int, str)
+    def updateParameters (self, value, parameter):
 
-        manufacturbility = refresh.manufacturbility(force, velocity, blankthickness, temperature)
-        refresh.field(force, velocity, blankthickness, temperature)
+        # print("update ",parameter," to ",value)
 
-        self.update.emit(manufacturbility)
+        # manufacturbility = refresh.manufacturbility(force, velocity, blankthickness, temperature)
+        refresh.field(value, parameter)
+
+        # self.update.emit(manufacturbility)
 
 
     @Slot(str)
-    def changeResultType (self, str):
+    def changmodelType (self, str):
         model_control.load(str)
 
 
@@ -37,21 +91,18 @@ class MainWindow(QObject):
     #     self.bestruntable.emit(tablemodel)
 
 
-    @Slot(str, str)
-    def loadPredictionMesh (self, die, edge):
-        load.predictionmesh(die, edge)
-
-
-    @Slot(str, str)
-    def setMaterialandProcess (self, material, process):
-        model_control.selectMaterialandProcess(material, process)
 
 
 
 
-    @Property(list, constant=True)
-    def load_optivaropts (self):
-        return optimisation.load_optivars()
+    @Slot(result=list)
+    def load_opti_varopts (self):
+        return optimisation.load_varopts()
+    
+
+    @Slot(str, str, result=bool)
+    def enable_opti_vars (self, var, model):
+        return optimisation.enable_vars(var, model)
 
 
     change_optivars = Signal()
@@ -75,11 +126,33 @@ class MainWindow(QObject):
     @Property(list, notify=change_optivars)
     def picked_optivars (self):
         return optimisation.picked_optivars()
+
+    
+    @Slot(str, result=float)
+    def get_optivar_lowerbound (self, var):
+        return optimisation.get_var_property(var, "lower bound")
+
+    
+    @Slot(str, result=float)
+    def get_optivar_upperbound (self, var):
+        return optimisation.get_var_property(var, "upper bound")
+
+    
+    @Slot(str, result=float)
+    def get_optivar_decimals (self, var):
+        return optimisation.get_var_property(var, "decimals")
     
 
-    @Slot(str, int, result=list)
-    def get_optivar_units (self, str, idx):
-        return optimisation.get_units(str, idx)
+    @Slot(str, result=list)
+    def get_optivar_units (self, str):
+        return optimisation.get_var_property(str, "units")
+    
+
+    opti_var_name_changed = Signal()
+    @Slot(int, str, str)
+    def change_opti_var_name (self, idx, old, new):
+        optimisation.change_name(idx, old, new)
+        self.opti_var_name_changed.emit()
     
 
     @Slot(str, int, int, str)
@@ -90,6 +163,13 @@ class MainWindow(QObject):
     @Slot()
     def start_optimisation (self):
         optimisation.start()
+
+
+    # opti_result_updated = Signal(int, int, float)
+    # @Slot()
+    # def update_opti_graph (self):
+    #     i, x, y = optimisation.update_graph()
+    #     self.opti_result_updated.emit(i, x, y)
 
 
     @Slot(result=list)
@@ -118,6 +198,11 @@ class MainWindow(QObject):
     @Property(list, constant=True)
     def get_final_vars (self):
         return optimisation.get_final_vars()
+    
+
+    @Slot(result=list)
+    def get_opti_final_graph (self):
+        return optimisation.get_final_graph()
 
 
     # optiresults_requested = Signal()
@@ -143,7 +228,7 @@ class MainWindow(QObject):
 
 
 if __name__ == "__main__":
-    app = QGuiApplication(sys.argv)
+    app = QApplication(sys.argv)
     engine = QQmlApplicationEngine()
 
     model = optimisation.BestRunTable(pd.read_csv(os.path.join("temp","optimisation_result.csv")))
@@ -160,6 +245,7 @@ if __name__ == "__main__":
     engine.rootContext().setContextProperty("backend", main)
 
     qml_file = Path(__file__).resolve().parent / "main.qml"
+#    qml_file = Path(__file__).resolve().parent / "qml/optimisation_setup_3_rename.qml"
     engine.load(qml_file)
 
     if not engine.rootObjects():

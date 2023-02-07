@@ -12,7 +12,7 @@ def manufacturbility (force, velocity, blankthickness, temperature):
     return (force + velocity + blankthickness + temperature)/4
 
 
-def field (var1, var2, var3, var4):
+def field (value, parameter):
 
     # # Create a blank image with a white background
     # img = Image.new('RGB', (256, 384), (255, 255, 255))
@@ -49,7 +49,7 @@ def field (var1, var2, var3, var4):
     img[1,:,:] = np.load(os.path.join(os.getcwd(),"temp","input_2.npy"))
     img[2,:,:] = np.load(os.path.join(os.getcwd(),"temp","input_1.npy"))
     img[3,:,:] = np.load(os.path.join(os.getcwd(),"temp","input_2.npy"))
-    img[4,:,:] = var3 * np.ones((256,384))
+    img[4,:,:] = value * np.ones((256,384))
 
     # m = model
     # m = model.load("Thinning")

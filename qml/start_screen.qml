@@ -5,7 +5,7 @@ import QtQuick.Controls
 
 Item {
     id: startscreenitem
-    width: 450
+    width: 500
     height: 150
     Component.onCompleted: {
         window.width = width
@@ -52,7 +52,7 @@ Item {
 
         Button {
             id: predictionButton
-            width: container.width/3
+            width: container.width/4
             text: qsTr("Quick Prediction")
             anchors.left: parent.left
             anchors.top: parent.top
@@ -65,7 +65,7 @@ Item {
 
         Button {
             id: optimisationButton
-            width: container.width/3
+            width: container.width/4
             text: qsTr("Optimisation")
             anchors.left: predictionButton.right
             anchors.top: parent.top
@@ -78,7 +78,7 @@ Item {
 
         Button {
             id: sensitivityButton
-            width: container.width/3
+            width: container.width/4
             text: qsTr("Sensitivity Analysis")
             anchors.left: optimisationButton.right
             anchors.top: parent.top
@@ -87,6 +87,20 @@ Item {
             anchors.leftMargin: 0
             anchors.bottomMargin: 0
             onClicked: mainStack.replace("sensitivity_setup_1.qml")
+        }
+
+        Button {
+            id: developerButton
+            text: qsTr("Developer Mode")
+            anchors.left: sensitivityButton.right
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.rightMargin: 0
+            anchors.leftMargin: 0
+            anchors.bottomMargin: 0
+            anchors.topMargin: 0
+            onClicked: mainStack.replace("developer_setup_1.qml")
         }
     }
 

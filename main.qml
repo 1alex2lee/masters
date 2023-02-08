@@ -12,7 +12,7 @@ Window {
 
     StackView {
             id: mainStack
-            initialItem: "qml/developer_setup_1.qml"
+            initialItem: "qml/dev_retrain_setup_2.qml"
 //            anchors.fill: parent
         }
 }

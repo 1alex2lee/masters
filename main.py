@@ -216,6 +216,16 @@ class MainWindow(QObject):
 
 
 
+    @Slot(str, result=int)
+    def get_dev_filecount (self, dir):
+        return len(os.listdir(dir[7:]))
+    
+
+    @Slot(result=list)
+    def get_dev_retrain_lossfunctions (self):
+        return ["MSE Loss"]
+
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     engine = QQmlApplicationEngine()

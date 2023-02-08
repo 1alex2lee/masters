@@ -23,6 +23,8 @@
         "qml/sensitivity_workspace.qml",
 
         "qml/developer_setup_1.qml",
+        "qml/dev_retrain_setup_1.qml",
+        "qml/dev_retrain_setup_2.qml",
         "qml/developer_workspace.qml",
 
         "main.py",

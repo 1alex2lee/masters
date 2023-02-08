@@ -160,21 +160,10 @@ class MainWindow(QObject):
         optimisation.set_bounds(var, lower, upper, unit)
     
 
+    opti_result_updated = Signal(int, int, float)
     @Slot()
     def start_optimisation (self):
-        optimisation.start()
-
-
-    # opti_result_updated = Signal(int, int, float)
-    # @Slot()
-    # def update_opti_graph (self):
-    #     i, x, y = optimisation.update_graph()
-    #     self.opti_result_updated.emit(i, x, y)
-
-
-    @Slot(result=list)
-    def optimisation_progress (self):
-        return optimisation.get_progress()
+        optimisation.start(self)
     
 
     @Property(list, constant=True)

@@ -102,9 +102,6 @@ Item {
             anchors.leftMargin: 10
             anchors.topMargin: 10
         }
-
-
-
     }
 
     Rectangle {

@@ -138,10 +138,10 @@ def set_bounds (var, lower, upper, unit):
     bounds[var] = [lower, upper, unit]
 
 
-def start ():
+def start (qml):
     global bounds, options
 
-    threading.Thread(target=optimise, args=(bounds, options)).start()
+    threading.Thread(target=optimise, args=(bounds, options, qml)).start()
 
 
 def stop ():
@@ -150,7 +150,7 @@ def stop ():
     stop_requested = True
 
 
-def optimise (bounds, options):
+def optimise (bounds, options, qml):
     global progress, runsno, picked_vars, bestrun, best_output, current_output, all_runs, stop_requested
 
     print("optimisation started")
@@ -194,17 +194,12 @@ def optimise (bounds, options):
             for var in all_runs:
                 bestrun.append([var, all_runs[var][-1]])
 
+        qml.opti_result_updated.emit(progress, runsno, current_output)
+
         time.sleep(2)
 
     all_runs_df = pd.DataFrame(all_runs)
     all_runs_df.to_csv(os.path.join("temp","optimisation_result.csv"))
-
-
-def get_progress ():
-    global progress, runsno, current_output
-    
-    print(progress," out of ",runsno, "current value ",round(current_output,2))
-    return [progress, runsno, current_output]
 
 
 def update_graph ():

@@ -61,65 +61,6 @@ Item {
         value: 0
     }
 
-//    Rectangle {
-//        id: bestrunContent
-//        color: "#ffffff"
-//        anchors.left: parent.left
-//        anchors.right: parent.right
-//        anchors.top: progressBar.bottom
-//        anchors.bottom: bottomNavBar.top
-//        anchors.rightMargin: 10
-//        anchors.leftMargin: 10
-//        anchors.bottomMargin: 10
-//        anchors.topMargin: 10
-
-//        Text {
-//            id: header
-//            text: qsTr("Best Run so far")
-//            anchors.left: parent.left
-//            anchors.top: parent.top
-//            font.pixelSize: 12
-//            anchors.leftMargin: 10
-//            anchors.topMargin: 10
-//        }
-
-//        ListView {
-//            id: bestrunList
-//            anchors.left: parent.left
-//            anchors.right: parent.right
-//            anchors.top: header.bottom
-//            anchors.bottom: parent.bottom
-//            anchors.rightMargin: 10
-//            anchors.leftMargin: 10
-//            anchors.topMargin: 10
-//            delegate: Rectangle {
-//                height: 20
-//                anchors.left: parent.left
-//                anchors.right: parent.right
-//                Text {
-//                    id: varname
-//                    x: 33
-//                    text: model.modelData[0]
-//                    anchors.left: parent.left
-//                    anchors.top: parent.top
-//                    font.pixelSize: 12
-//                    anchors.topMargin: 0
-//                    anchors.leftMargin: 0
-//                }
-
-//                Text {
-//                    id: varvalue
-//                    text: model.modelData[1].toFixed(2)
-//                    anchors.right: parent.right
-//                    anchors.top: parent.top
-//                    font.pixelSize: 12
-//                    anchors.topMargin: 0
-//                    anchors.rightMargin: 0
-//                }
-//            }
-//        }
-//    }
-
     Rectangle {
         id: chartContent
         color: "#ffffff"
@@ -200,41 +141,26 @@ Item {
         }
     }
 
-    Timer {
-        interval: 1000; running: true; repeat: true
-        onTriggered: {
-            var progress = backend.optimisation_progress()
-            console.log(progress)
-            progressBar.value = progress[0]/progress[1]
-            if (progress[0]/progress[1] < 1) {
-                progressLabel.text = "Currently on run " + progress[0] + "/" + progress[1]
-//                bestrunList.model = backend.getbestrun
+    Connections {
+        target: backend
+        function onOpti_result_updated (x, runsno, y) {
 
-                progressLine.append(progress[0], progress[2])
-                x_axis.max = progress[0]
-                if (progress[2] > y_axis.max) {
-                    y_axis.max = progress[2]*1.1
+            if (x/runsno <= 1) {
+                progressBar.value = x/runsno
+
+                progressLine.append(x, y)
+                x_axis.max = x
+                if (y > y_axis.max*1.1) {
+                    y_axis.max = y*1.1
                 }
-
             } else {
-                stop()
                 earlystopButton.visible = false
                 nextButton.visible = true
                 backButton.visible = false
                 progressLabel.text = "Done!"
             }
-//            backend.update_opti_graph()
-
         }
     }
-
-    Connections {
-        target: backend
-//        function onOpti_result_updated (idx, x, y) {
-//            progressLine.insert(idx, x, y)
-//        }
-    }
-
 }
 
 

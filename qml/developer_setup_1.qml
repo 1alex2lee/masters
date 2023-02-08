@@ -6,33 +6,13 @@ import QtQuick.Controls
 
 Item {
     id: developersetupItem
-    width: 400
-    height: 400
+    width: 200
+    height: 200
     Component.onCompleted: {
         window.width = width
         window.height = height
         window.x = Screen.width / 2 - width / 2
         window.y = Screen.height / 2 - height / 2
-    }
-
-    FolderDialog {
-        id: meshFolderDialog
-        title: "Please choose a folder containing mesh files"
-        onAccepted: {
-            console.log("You chose: " + meshFolderDialog.folder)
-            loadMeshText.text = meshFolderDialog.folder.toString().slice(meshFolderDialog.folder.toString().lastIndexOf("/")+1) + " folder selected"
-//            if (edgeFileDialog.currentFile.toString() !== qsTr("")) nextButton.visible = true
-        }
-    }
-
-    FolderDialog {
-        id: outputFolderDialog
-        title: "Please choose a folder containing output files"
-        onAccepted: {
-            console.log("You chose: " + outputFolderDialog.folder)
-            loadOutputText.text = outputFolderDialog.folder.toString().slice(outputFolderDialog.folder.toString().lastIndexOf("/")+1) + " folder selected"
-//            if (edgeFileDialog.currentFile.toString() !== qsTr("")) nextButton.visible = true
-        }
     }
 
     Rectangle {
@@ -48,7 +28,7 @@ Item {
 
         Text {
             id: titleLabel
-            text: qsTr("Re-Train Surrogate Model")
+            text: qsTr("Developer Mode")
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom
@@ -60,116 +40,27 @@ Item {
         }
     }
 
-    Rectangle {
-        id: content
-        color: "#ffffff"
+    Button {
+        id: retrainButton
+        text: qsTr("Re-Train Surrogate Model")
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: titleBar.bottom
-        anchors.bottom: bottomNavBar.top
-        anchors.bottomMargin: 0
-        anchors.topMargin: 0
+        anchors.rightMargin: 10
+        anchors.leftMargin: 10
+        anchors.topMargin: 10
+        onClicked: mainStack.replace("dev_retrain_setup_1.qml")
+    }
 
-        Text {
-            id: modelLabel
-            text: qsTr("Model")
-            anchors.left: parent.left
-            anchors.top: parent.top
-            font.pixelSize: 12
-            anchors.leftMargin: 10
-            anchors.topMargin: 20
-        }
-
-        ComboBox {
-            id: modelDropdown
-            width: 140
-            anchors.verticalCenter: modelLabel.verticalCenter
-            anchors.right: parent.right
-            anchors.rightMargin: 10
-            model: backend.load_modeltypes()
-        }
-
-        Text {
-            id: loadMeshTitle
-            x: 10
-            y: 45
-            text: qsTr("Mesh Files Directory")
-            anchors.left: parent.left
-            anchors.top: modelLabel.bottom
-            font.pixelSize: 12
-            anchors.leftMargin: 10
-            anchors.topMargin: 30
-        }
-
-        Button {
-            id: loadMeshButton
-            x: 338
-            y: 48
-            text: qsTr("Browse")
-            anchors.verticalCenter: loadMeshTitle.verticalCenter
-            anchors.right: parent.right
-            anchors.rightMargin: 10
-            onClicked: meshFolderDialog.open()
-        }
-
-        Text {
-            id: loadMeshText
-            anchors.top: loadMeshButton.bottom
-            anchors.leftMargin: 10
-            anchors.topMargin: 5
-            text: qsTr("None Selected")
-            anchors.left: parent.left
-        }
-
-        Text {
-            id: loadMeshFileCount
-            text: qsTr("0 files found")
-            anchors.verticalCenter: loadMeshText.verticalCenter
-            anchors.right: parent.right
-            font.pixelSize: 12
-            anchors.rightMargin: 10
-        }
-
-        Text {
-            id: loadOutputTitle
-            x: 10
-            y: 45
-            text: qsTr("Output Files Directory")
-            anchors.left: parent.left
-            anchors.top: loadMeshFileCount.bottom
-            font.pixelSize: 12
-            anchors.leftMargin: 10
-            anchors.topMargin: 30
-        }
-
-        Button {
-            id: loadOutputButton
-            x: 338
-            y: 48
-            text: qsTr("Browse")
-            anchors.verticalCenter: loadOutputTitle.verticalCenter
-            anchors.right: parent.right
-            anchors.rightMargin: 10
-            onClicked: outputFolderDialog.open()
-        }
-
-        Text {
-            id: loadOutputText
-            anchors.top: loadOutputButton.bottom
-            anchors.leftMargin: 10
-            anchors.topMargin: 5
-            text: qsTr("None Selected")
-            anchors.left: parent.left
-        }
-
-        Text {
-            id: loadOutputFileCount
-            text: qsTr("0 files found")
-            anchors.verticalCenter: loadOutputText.verticalCenter
-            anchors.right: parent.right
-            font.pixelSize: 12
-            anchors.rightMargin: 10
-        }
+    Button {
+        id: multimeshButton
+        text: qsTr("Multi-Mesh Prediction")
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: retrainButton.bottom
+        anchors.rightMargin: 10
+        anchors.leftMargin: 10
+        anchors.topMargin: 10
     }
 
     Connections {

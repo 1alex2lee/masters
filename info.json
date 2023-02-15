@@ -1,149 +1,173 @@
 {
-  "models": [
+    "processes": [
     {
-      "name": "Thinning",
-      "inputs": [
+        "name": "Car Door Panel Stamping",
+        "models": ["Thinning", "Displacement", "Springback"],
+        "inputs": [
         {
-          "name": "thinning input 1",
-          "units": ["kN"],
-          "lower bound": 2,
-          "upper bound": 100,
-          "decimals": 0
+            "name": "Ellipse Major Axis (a)",
+            "units": "mm",
+            "lower bound": 10,
+            "upper bound": 64,
+            "decimals": 0
         },
         {
-          "name": "thinning input 2",
-          "units": ["mm/s"],
-          "lower bound": 0.1,
-          "upper bound": 5,
-          "decimals": 1
+            "name": "Ellipse Minor Axis Ratio (b/a)",
+            "units": "",
+            "lower bound": 0.4,
+            "upper bound": 1,
+            "decimals": 1
         },
         {
-          "name": "thinning input 3",
-          "units": ["\u00b0C"],
-          "lower bound": 300,
-          "upper bound": 600,
-          "decimals": 0
+            "name": "Handle Groove Depth (H)",
+            "units": "mm",
+            "lower bound": 15,
+            "upper bound": 22,
+            "decimals": 0
+        },
+        {
+            "name": "Upper Fillet Radii Ratio (R1/H)",
+            "units": "",
+            "lower bound": 0.5,
+            "upper bound": 1,
+            "decimals": 1
+        },
+        {
+            "name": "Lower Fillet Radii Ratio (R2/H)",
+            "units": "",
+            "lower bound": 0.5,
+            "upper bound": 1,
+            "decimals": 1
+        },
+        {
+            "name": "L0",
+            "units": "mm",
+            "lower bound": 0,
+            "upper bound": 60,
+            "decimals": 0
+        },
+        {
+            "name": "Blank Upper Width (L1)",
+            "units": "mm",
+            "lower bound": 740,
+            "upper bound": 800,
+            "decimals": 0
+        },
+        {
+            "name": "Blank Lower Width (L2)",
+            "units": "mm",
+            "lower bound": 680,
+            "upper bound": 740,
+            "decimals": 0
+        },
+        {
+            "name": "Temperature",
+            "units": "°C",
+            "lower bound": 20,
+            "upper bound": 20,
+            "decimals": 0
+        },
+        {
+            "name": "Stamping Speed",
+            "units": "mm/s",
+            "lower bound": 300,
+            "upper bound": 300,
+            "decimals": 0
+        },
+        {
+            "name": "Friction Coefficient",
+            "units": "",
+            "lower bound": 0.12,
+            "upper bound": 0.12,
+            "decimals": 0
+        },
+        {
+            "name": "Blank Thickness",
+            "units": "mm",
+            "lower bound": 1,
+            "upper bound": 1,
+            "decimals": 0
+        },
+        {
+            "name": "Punch-Die Clerance",
+            "units": "%",
+            "lower bound": 10,
+            "upper bound": 10,
+            "decimals": 0
         }
-      ],
-      "outputs": [
-        {
-          "name": "thinning output 1",
-          "units": ["kN"],
-          "lower bound": 2,
-          "upper bound": 100,
-          "decimals": 0
-        },
-        {
-          "name": "thinning output 2",
-          "units": ["mm/s"],
-          "lower bound": 0.1,
-          "upper bound": 5,
-          "decimals": 1
-        }
-      ]
+        ],
+        "outputs": []
     },
     {
-      "name": "Springback",
-      "inputs": [
+        "name": "U-bending",
+        "models": ["Thinning", "Post-Springback Displacement"],
+        "inputs": [
         {
-          "name": "sprinback input 1",
-          "units": ["kN"],
-          "lower bound": 2,
-          "upper bound": 100,
-          "decimals": 0
+            "name": "Draft Angle (d)",
+            "units": "°",
+            "lower bound": 0,
+            "upper bound": 8,
+            "decimals": 1
         },
         {
-          "name": "sprinback input 2",
-          "units": ["mm/s"],
-          "lower bound": 0.1,
-          "upper bound": 5,
-          "decimals": 1
+            "name": "Die Corner Radius (r_d)",
+            "units": "mm",
+            "lower bound": 2,
+            "upper bound": 8,
+            "decimals": 1
         },
         {
-          "name": "sprinback input 3",
-          "units": ["\u00b0C"],
-          "lower bound": 300,
-          "upper bound": 600,
-          "decimals": 0
+            "name": "Punch Corner Radius (r_p)",
+            "units": "mm",
+            "lower bound": 2,
+            "upper bound": 8,
+            "decimals": 1
+        },
+        {
+            "name": "Blank Thickness (T)",
+            "units": "mm",
+            "lower bound": 0.5,
+            "upper bound": 3,
+            "decimals": 1
+        },
+        {
+            "name": "Clerance Between Punch & Die (c)",
+            "units": "",
+            "lower bound": 10,
+            "upper bound": 15,
+            "decimals": 1
+        },
+        {
+            "name": "Blank Holder Force (BHF)",
+            "units": "kN",
+            "lower bound": 5,
+            "upper bound": 60,
+            "decimals": 0
+        },
+        {
+            "name": "Friction Coefficient (f)",
+            "units": "",
+            "lower bound": 0.1,
+            "upper bound": 0.2,
+            "decimals": 2
+        },
+        {
+            "name": "Temperature",
+            "units": "°C",
+            "lower bound": 20,
+            "upper bound": 20,
+            "decimals": 0
+        },
+        {
+            "name": "Stamping Speed",
+            "units": "mm/s",
+            "lower bound": 150,
+            "upper bound": 150,
+            "decimals": 0
         }
-      ],
-      "outputs": [
-        {
-          "name": "sprinback output 1",
-          "units": ["kN"],
-          "lower bound": 2,
-          "upper bound": 100,
-          "decimals": 0
-        },
-        {
-          "name": "sprinback output 2",
-          "units": ["mm/s"]
-        }
-      ]
-    },
-    {
-      "name": "Strain",
-      "inputs": [
-        {
-          "name": "strain input 1",
-          "units": ["kN"],
-          "lower bound": 2,
-          "upper bound": 100,
-          "decimals": 0
-        },
-        {
-          "name": "strain input 2",
-          "units": ["mm/s"],
-          "lower bound": 0.1,
-          "upper bound": 5,
-          "decimals": 1
-        },
-        {
-          "name": "strain input 3",
-          "units": ["\u00b0C"],
-          "lower bound": 300,
-          "upper bound": 600,
-          "decimals": 0
-        }
-      ],
-      "outputs": [
-        {
-          "name": "strain output 1",
-          "units": ["kN"],
-          "lower bound": 2,
-          "upper bound": 100,
-          "decimals": 0
-        },
-        {
-          "name": "strain output 2",
-          "units": ["mm/s"],
-          "lower bound": 0.1,
-          "upper bound": 5,
-          "decimals": 1
-        }
-      ]
+        ],
+        "outputs": []
     }
-  ],
-  "materials": [
-    {
-      "name": "Aluminium"
-    },
-    {
-      "name": "Steel"
-    },
-    {
-      "name": "Titanium"
-    }
-  ],
-  "processes": [
-    {
-      "name": "Cold Stamping"
-    },
-    {
-      "name": "Hot Stamping"
-    },
-    {
-      "name": "Room Temperature Stamping"
-    }
-  ]
+    ],
+    "materials": ["Aluminium Alloy 5754"]
 }

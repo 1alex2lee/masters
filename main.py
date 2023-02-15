@@ -5,19 +5,28 @@ import pandas as pd
 
 from PySide6.QtWidgets import QApplication
 from PySide6.QtQml import QQmlApplicationEngine, qmlRegisterSingletonType
-from PySide6.QtCore import QObject, Slot, Signal, Property, QSortFilterProxyModel, Qt
+from PySide6.QtCore import QObject, Slot, Signal, Property, QSortFilterProxyModel, QUrl
+from PySide6.QtQuick import QQuickWindow, QSGRendererInterface, QQuickView
 
-from python import refresh, model_control, load, optimisation, prediction
+
+from python import die, model_control, load, optimisation, prediction
+
 
 class MainWindow(QObject):
     def __init__(self):
         QObject.__init__(self)
 
 
+    load_pred_mesh_progress = Signal(str, float)
+    load_pred_mesh_complete = Signal(str)
+    @Slot(str, str, str)
+    def loadPredictionMesh (self, die, edge, blank):
+        load.predictionmesh(die, edge, blank, self)
 
-    @Slot(str, str)
-    def loadPredictionMesh (self, die, edge):
-        load.predictionmesh(die, edge)
+
+    @Slot(result=bool)
+    def is_blank_loaded (self):
+        return die.is_blank_loaded()
 
 
     @Slot(result=list)
@@ -37,49 +46,68 @@ class MainWindow(QObject):
 
     @Slot(str, str)
     def setMaterialandProcess (self, material, process):
-        model_control.selectMaterialandProcess(material, process)
+        load.select_materialandprocess(material, process)
 
 
 
 
-    @Slot(str, result=list)
-    def get_pred_parameters (self, str):
-        return load.model_inputs(str)
+    @Slot(result=list)
+    def get_pred_inputs (self):
+        return load.process_inputs()
     
 
-    @Slot(str, str, result=str)
-    def get_pred_parameter_units (self, model, parameter):
-        return load.model_input_units(model, parameter)
+    @Slot(str, result=str)
+    def get_pred_parameter_units (self, parameter):
+        return load.process_input_units(parameter)
+    
+
+    @Slot(str, result=float)
+    def get_pred_parameter_lowerbound (self, parameter):
+        return load.process_input_lowerbound(parameter)
+    
+
+    @Slot(str, result=float)
+    def get_pred_parameter_upperbound (self, parameter):
+        return load.process_input_upperbound(parameter)
+    
+
+    @Slot(str, result=int)
+    def get_pred_parameter_decimals (self, parameter):
+        return load.process_input_decimals(parameter)
     
 
     @Slot(str, result=list)
     def get_pred_metrics (self, str):
         # return prediction.metrics(str)
-        return load.model_outputs(str)
+        return load.process_outputs(str)
     
 
-    @Slot(str, result=str)
-    def get_pred_result (self, str):
-        return prediction.update_result(str)
-    
+    # @Slot(str, result=str)
+    # def get_pred_result (self, str):
+    #     return prediction.update_result(str)
 
 
-
-    update = Signal(float)
+    pred_updated = Signal()
     @Slot(int, str)
-    def updateParameters (self, value, parameter):
+    def send_pred_inputvalue (self, value, parameter):
 
         # print("update ",parameter," to ",value)
 
         # manufacturbility = refresh.manufacturbility(force, velocity, blankthickness, temperature)
-        refresh.field(value, parameter)
+        # refresh.field(value, parameter)
 
-        # self.update.emit(manufacturbility)
+        prediction.receive_inputvalue (value, parameter, self)
 
 
     @Slot(str)
-    def changmodelType (self, str):
+    def changemodelType (self, str):
         model_control.load(str)
+
+
+    pred_close_workspace = Signal()
+    @Slot()
+    def pred_close_workspace_request (self):
+        self.pred_close_workspace.emit()
 
 
     # bestruntable = Signal(QAbstractTableModel)
@@ -101,8 +129,8 @@ class MainWindow(QObject):
     
 
     @Slot(str, str, result=bool)
-    def enable_opti_vars (self, var, model):
-        return optimisation.enable_vars(var, model)
+    def enable_opti_vars (self, var, process):
+        return optimisation.enable_vars(var, process)
 
 
     change_optivars = Signal()
@@ -226,17 +254,17 @@ class MainWindow(QObject):
         return ["MSE Loss"]
 
 
+
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     engine = QQmlApplicationEngine()
 
     model = optimisation.BestRunTable(pd.read_csv(os.path.join("temp","optimisation_result.csv")))
-
     proxyModel = QSortFilterProxyModel()
     proxyModel.setSourceModel(model)
     # proxyModel.setSortingEnabled(True)
     # proxyModel.sort(2, Qt.AscendingOrder)
-
     # model.setSortingEnabled(True)
     engine.rootContext().setContextProperty("bestruntable_model", proxyModel)
 
@@ -244,9 +272,22 @@ if __name__ == "__main__":
     engine.rootContext().setContextProperty("backend", main)
 
     qml_file = Path(__file__).resolve().parent / "main.qml"
-#    qml_file = Path(__file__).resolve().parent / "qml/optimisation_setup_3_rename.qml"
+    # qml_file = Path(__file__).resolve().parent / "qml/start_screen.qml"
     engine.load(qml_file)
 
-    if not engine.rootObjects():
-        sys.exit(-1)
+    main.setProperty("QSGRendererInterface", "OpenGL")
+    main.setProperty("OSG_RHI_BACKEND", "opengl")
+
+    QQuickWindow.setGraphicsApi(QSGRendererInterface.OpenGL)
+    os.environ["QT_QUICK_BACKEND"] = "software"
+
+    # view = QQuickView()
+    # view.setResizeMode(QQuickView.SizeRootObjectToView)
+    # qml_file = Path(__file__).parent / "qml/prediction_workspace_3d.qml"
+    # view.setSource(QUrl.fromLocalFile(qml_file))
+
+#    if not engine.rootObjects():
+#        sys.exit()
+    
+#    app.exec()
     sys.exit(app.exec())

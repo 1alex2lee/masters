@@ -4,9 +4,11 @@
         "qml/start_screen.qml",
 
         "qml/prediction_setup_1.qml",
+        "qml/prediction_setup_1_readd.qml",
         "qml/prediction_setup_2.qml",
         "qml/prediction_setup_3.qml",
         "qml/prediction_workspace.qml",
+        "qml/prediction_workspace_3d.qml",
 
         "qml/optimisation_setup_1.qml",
         "qml/optimisation_setup_2.qml",
@@ -33,6 +35,7 @@
         "python/manufacturbility.py",
         "python/model_control.py",
         "python/die.py",
+        "python/model_architecture.py",
 
         "temp/imported_die.png"]
 }

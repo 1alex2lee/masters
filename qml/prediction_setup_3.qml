@@ -8,12 +8,19 @@ Item {
     width: 450
     height: 210
     Component.onCompleted: {
+        window.x = window.x + window.width/2 - width/2
+        window.y = window.y + window.height/2 - height/2
         window.width = width
         window.height = height
-        window.x = Screen.width / 2 - width / 2
-        window.y = Screen.height / 2 - height / 2
+//        window.x = Screen.width / 2 - width / 2
+//        window.y = Screen.height / 2 - height / 2
     }
 
+//Window {
+//    id: window
+//    width: 450; height: 210
+//    title: "User-Centirc Software to Assist Design for Forming"
+//    visible: true
 
     Rectangle {
         id: titleBar
@@ -41,14 +48,47 @@ Item {
     }
 
     Rectangle {
-        id: selectMaterialContent
-        height: (predictionsetup3item.height - titleBar.height - bottomNavBar.height)/2
+        id: selectProcessContent
+        height: (parent.height-titleBar.height-bottomNavBar.height)/2
         color: "#ffffff"
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: titleBar.bottom
         anchors.rightMargin: 0
         anchors.topMargin: 0
+
+        Text {
+            id: selectProcessTitle
+            text: qsTr("Select Processe")
+            anchors.left: parent.left
+            anchors.top: parent.top
+            font.pixelSize: 12
+            anchors.leftMargin: 10
+            anchors.topMargin: 10
+        }
+
+        ComboBox {
+            id: selectProcessDropdown
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: selectProcessTitle.bottom
+            anchors.rightMargin: 10
+            anchors.leftMargin: 10
+            anchors.topMargin: 10
+            model: backend.load_processes()
+        }
+    }
+
+    Rectangle {
+        id: selectMaterialContent
+        color: "#ffffff"
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: selectProcessContent.bottom
+        anchors.bottom: bottomNavBar.top
+        anchors.bottomMargin: 0
+        anchors.topMargin: 0
+        anchors.rightMargin: 0
 
         Text {
             id: selectMaterialTitle
@@ -69,42 +109,6 @@ Item {
             anchors.leftMargin: 10
             anchors.topMargin: 10
             model: backend.load_materials()
-        }
-
-
-
-    }
-
-    Rectangle {
-        id: selectProcessContent
-        color: "#ffffff"
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: selectMaterialContent.bottom
-        anchors.bottom: bottomNavBar.top
-        anchors.bottomMargin: 0
-        anchors.topMargin: 0
-        anchors.rightMargin: 0
-
-        Text {
-            id: selectProcessTitle
-            text: qsTr("Select Stamping Type")
-            anchors.left: parent.left
-            anchors.top: parent.top
-            font.pixelSize: 12
-            anchors.leftMargin: 10
-            anchors.topMargin: 10
-        }
-
-        ComboBox {
-            id: selectProcessDropdown
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.top: selectProcessTitle.bottom
-            anchors.rightMargin: 10
-            anchors.leftMargin: 10
-            anchors.topMargin: 10
-            model: backend.load_processes()
         }
     }
 
@@ -132,11 +136,18 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
             icon.color: "#ffffff"
+            anchors.rightMargin: 10
             onClicked: {
                 backend.setMaterialandProcess(selectMaterialDropdown.currentValue, selectProcessDropdown.currentValue)
                 mainStack.replace("prediction_workspace.qml")
+//                window.close()
+//                backend.pred_close_workspace_request()
+//                var component = Qt.createComponent("prediction_workspace.qml")
+//                var new_window = component.createObject(window)
+//                new_window.show()
+//                new_window.x = window.x + window.width/2 - new_window.width/2
+//                new_window.y = window.y + window.height/2 - new_window.height/2
             }
-            anchors.rightMargin: 10
         }
 
         Button {
@@ -147,6 +158,14 @@ Item {
             anchors.left: parent.left
             anchors.leftMargin: 10
             onClicked: mainStack.replace("prediction_setup_2.qml")
+//            onClicked: {
+//                window.close()
+//                var component = Qt.createComponent("prediction_setup_2.qml")
+//                var new_window = component.createObject(window)
+//                new_window.show()
+//                new_window.x = window.x + window.width/2 - new_window.width/2
+//                new_window.y = window.y + window.height/2 - new_window.height/2
+//            }
         }
     }
 

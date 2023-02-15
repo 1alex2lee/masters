@@ -8,11 +8,19 @@ Item {
     width: 450
     height: 250
     Component.onCompleted: {
+        window.x = window.x + window.width/2 - width/2
+        window.y = window.y + window.height/2 - height/2
         window.width = width
         window.height = height
-        window.x = Screen.width / 2 - width / 2
-        window.y = Screen.height / 2 - height / 2
+//        window.x = Screen.width / 2 - width / 2
+//        window.y = Screen.height / 2 - height / 2
     }
+
+//Window {
+//    id: window
+//    width: 450; height: 250
+//    title: "User-Centirc Software to Assist Design for Forming"
+//    visible: true
 
     FileDialog {
         id: dieFileDialog
@@ -64,7 +72,7 @@ Item {
     
     Rectangle {
         id: loadDieContent
-        height: (predictionsetup1item.height - titleBar.height - bottomNavBar.height)/2
+        height: (window.height - titleBar.height - bottomNavBar.height)/2
         color: "#ffffff"
         anchors.left: parent.left
         anchors.right: parent.right
@@ -167,13 +175,19 @@ Item {
         Button {
             id: nextButton
             x: 398
-            visible: false
+            visible: true
             text: qsTr("Next")
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
             onClicked: {
 //                backend.loadPredictionMesh(dieFileDialog.currentFile.toString(), edgeFileDialog.currentFile.toString())
                 mainStack.replace("optimisation_setup_2.qml")
+//                window.close()
+//                var component = Qt.createComponent("optimisation_setup_2.qml")
+//                var new_window = component.createObject(window)
+//                new_window.show()
+//                new_window.x = window.x + window.width/2 - new_window.width/2
+//                new_window.y = window.y + window.height/2 - new_window.height/2
             }
             anchors.rightMargin: 10
         }
@@ -185,7 +199,16 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             anchors.leftMargin: 10
-            onClicked: mainStack.replace("start_screen.qml")
+//            onClicked: mainStack.replace("start_screen.qml")
+            onClicked: {
+                mainStack.replace("start_screen.qml")
+//                window.close()
+//                var component = Qt.createComponent("start_screen.qml")
+//                var new_window = component.createObject(window)
+//                new_window.show()
+//                new_window.x = window.x + window.width/2 - new_window.width/2
+//                new_window.y = window.y + window.height/2 - new_window.height/2
+            }
         }
     }
 

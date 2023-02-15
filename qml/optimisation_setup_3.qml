@@ -8,11 +8,19 @@ Item {
     width: 450
     height: 400
     Component.onCompleted: {
+        window.x = window.x + window.width/2 - width/2
+        window.y = window.y + window.height/2 - height/2
         window.width = width
         window.height = height
-        window.x = Screen.width / 2 - width / 2
-        window.y = Screen.height / 2 - height / 2
+//        window.x = Screen.width / 2 - width / 2
+//        window.y = Screen.height / 2 - height / 2
     }
+
+//Window {
+//    id: window
+//    width: 550; height: 400
+//    title: "User-Centirc Software to Assist Design for Forming"
+//    visible: true
     
     Rectangle {
         id: titleBar
@@ -41,7 +49,7 @@ Item {
 
     Rectangle {
         id: selectvariableContent
-        width: 180
+        width: 250
         color: "#ffffff"
         border.width: 1
         anchors.left: parent.left
@@ -83,7 +91,7 @@ Item {
                 text: model.modelData
                 anchors.left: parent.left
                 anchors.leftMargin: 10
-                enabled: backend.enable_opti_vars(text, modelDropdown.currentValue)
+                enabled: backend.enable_opti_vars(text, processDropdown.currentValue)
                 onClicked: {
                     if (checked) {
                         backend.pick_optivar(text)
@@ -121,18 +129,38 @@ Item {
         anchors.topMargin: 0
 
         Text {
-            id: modelLabel
-            text: qsTr("Model")
+            id: processLabel
+            text: qsTr("Process")
             anchors.left: parent.left
             anchors.top: parent.top
             font.pixelSize: 12
+            font.strikeout: true
             anchors.leftMargin: 10
             anchors.topMargin: 20
         }
 
         ComboBox {
+            id: processDropdown
+            width: 190
+            anchors.verticalCenter: processLabel.verticalCenter
+            anchors.right: parent.right
+            anchors.rightMargin: 10
+            model: backend.load_processes()
+        }
+
+        Text {
+            id: modelLabel
+            text: qsTr("Model")
+            anchors.left: parent.left
+            anchors.top: processLabel.bottom
+            font.pixelSize: 12
+            anchors.leftMargin: 10
+            anchors.topMargin: 10
+        }
+
+        ComboBox {
             id: modelDropdown
-            width: 140
+            width: processDropdown.width
             anchors.verticalCenter: modelLabel.verticalCenter
             anchors.right: parent.right
             anchors.rightMargin: 10
@@ -151,7 +179,7 @@ Item {
 
         ComboBox {
             id: materialDropdown
-            width: 140
+            width: processDropdown.width
             anchors.verticalCenter: materialLabel.verticalCenter
             anchors.right: parent.right
             anchors.rightMargin: 10
@@ -159,8 +187,8 @@ Item {
         }
 
         Text {
-            id: processLabel
-            text: qsTr("Stamping Type")
+            id: goalLabel
+            text: qsTr("Goal Variable")
             anchors.left: parent.left
             anchors.top: materialLabel.bottom
             font.pixelSize: 12
@@ -169,27 +197,8 @@ Item {
         }
 
         ComboBox {
-            id: processDropdown
-            width: 140
-            anchors.verticalCenter: processLabel.verticalCenter
-            anchors.right: parent.right
-            anchors.rightMargin: 10
-            model: backend.load_processes()
-        }
-
-        Text {
-            id: goalLabel
-            text: qsTr("Goal Variable")
-            anchors.left: parent.left
-            anchors.top: processLabel.bottom
-            font.pixelSize: 12
-            anchors.topMargin: 10
-            anchors.leftMargin: 10
-        }
-
-        ComboBox {
             id: goalDropdown
-            width: 140
+            width: processDropdown.width
             anchors.verticalCenter: goalLabel.verticalCenter
             anchors.right: parent.right
             anchors.rightMargin: 10
@@ -261,7 +270,7 @@ Item {
 
         ComboBox {
             id: searchmethodDropdown
-            width: 140
+            width: processDropdown.width
             anchors.verticalCenter: searchmethodLabel.verticalCenter
             anchors.right: parent.right
             anchors.rightMargin: 10
@@ -281,7 +290,6 @@ Item {
         SpinBox {
             id: runsnoInput
             x: 10
-            width: 80
             height: 20
             value: 20
             editable: true
@@ -309,13 +317,19 @@ Item {
             x: 398
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
+            anchors.rightMargin: 10
+            text: qsTr("Next")
             onClicked: {
                 backend.set_optiopts(materialDropdown.currentValue, processDropdown.currentValue, modelDropdown.currentValue, goalDropdown.currentValue,
                                      goalaim.checkedButton.text, settoValue.value, searchmethodDropdown.currentValue, runsnoInput.value)
                 mainStack.replace("optimisation_setup_4.qml")
+//                window.close()
+//                var component = Qt.createComponent("optimisation_setup_4.qml")
+//                var new_window = component.createObject(window)
+//                new_window.show()
+//                new_window.x = window.x + window.width/2 - new_window.width/2
+//                new_window.y = window.y + window.height/2 - new_window.height/2
             }
-            anchors.rightMargin: 10
-            text: qsTr("Next")
         }
 
         Button {
@@ -324,8 +338,16 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             anchors.leftMargin: 10
-            onClicked: mainStack.replace("optimisation_setup_2.qml")
             text: qsTr("Back")
+            onClicked: {
+                mainStack.replace("optimisation_setup_2.qml")
+//                window.close()
+//                var component = Qt.createComponent("optimisation_setup_2.qml")
+//                var new_window = component.createObject(window)
+//                new_window.show()
+//                new_window.x = window.x + window.width/2 - new_window.width/2
+//                new_window.y = window.y + window.height/2 - new_window.height/2
+            }
         }
     }
     Connections {

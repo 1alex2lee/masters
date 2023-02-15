@@ -81,6 +81,10 @@ Item {
         id: errorDialog
         text: "Not enough mesh files selected."
         buttons: MessageDialog.Ok
+        onOkClicked: {
+            console.log("ok")
+//            errorDialog.close()
+        }
     }
 
 
@@ -357,13 +361,13 @@ Item {
                 else {
 //                    backend.loadPredictionMesh(dieFileDialog.currentFile.toString(), edgeFileDialog.currentFile.toString(), blankFileDialog.currentFile.toString())
     //                backend.loadPredictionMesh("file:///Users/alexlee/OneDrive - Imperial College London/Year 4/Masters/code/masters/temp/sample_die.nas", "file:///Users/alexlee/OneDrive - Imperial College London/Year 4/Masters/code/masters/temp/sample_die_edge.nas", blankFileDialog.currentFile.toString())
-                    mainStack.replace("prediction_setup_2.qml")
-//                    window.close()
-//                    var component = Qt.createComponent("prediction_setup_2.qml")
-//                    var new_window = component.createObject(window)
-//                    new_window.show()
-//                    new_window.x = window.x + window.width/2 - new_window.width/2
-//                    new_window.y = window.y + window.height/2 - new_window.height/2
+    //                mainStack.replace("prediction_setup_2.qml")
+                    window.close()
+                    var component = Qt.createComponent("prediction_setup_2.qml")
+                    var new_window = component.createObject(window)
+                    new_window.show()
+                    new_window.x = window.x + window.width/2 - new_window.width/2
+                    new_window.y = window.y + window.height/2 - new_window.height/2
                 }
             }
             anchors.rightMargin: 10
@@ -376,15 +380,15 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             anchors.leftMargin: 10
-            onClicked: mainStack.replace("start_screen.qml")
-//            onClicked: {
-//                window.close()
-//                var component = Qt.createComponent("start_screen.qml")
-//                var new_window = component.createObject(window)
-//                new_window.show()
-//                new_window.x = window.x + window.width/2 - new_window.width/2
-//                new_window.y = window.y + window.height/2 - new_window.height/2
-//            }
+//            onClicked: mainStack.replace("start_screen.qml")
+            onClicked: {
+                window.close()
+                var component = Qt.createComponent("prediction_workspace.qml")
+                var new_window = component.createObject(window)
+                new_window.show()
+                new_window.x = window.x + window.width/2 - new_window.width/2
+                new_window.y = window.y + window.height/2 - new_window.height/2
+            }
         }
     }
 }

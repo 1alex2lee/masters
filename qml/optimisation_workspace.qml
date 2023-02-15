@@ -9,11 +9,17 @@ Item {
     height: 600
 
     Component.onCompleted: {
+        window.x = window.x + window.width/2 - width/2
+        window.y = window.y + window.height/2 - height/2
         window.width = width
         window.height = height
-        window.x = Screen.width / 2 - width / 2
-        window.y = Screen.height / 2 - height / 2
     }
+
+//Window {
+//    id: window
+//    width: 500; height: 600
+//    title: "User-Centirc Software to Assist Design for Forming"
+//    visible: true
 
     MenuBar {
         id: menubar
@@ -28,7 +34,16 @@ Item {
             title: qsTr("Mode")
             Action {
                 text: qsTr("Quick Prediction")
-                onTriggered: mainStack.replace("prediction_workspace.qml")
+                onTriggered: {
+                    mainStack.replace("prediction_workspace.qml")
+//                    window.close()
+//                    var component = Qt.createComponent("prediction_workspace.qml")
+//                    var new_window = component.createObject(window)
+//                    new_window.show()
+//                    new_window.x = window.x + window.width/2 - new_window.width/2
+//                    new_window.y = window.y + window.height/2 - new_window.height/2
+                }
+
             }
             Action {
                 text: qsTr("Optimisation")
@@ -36,7 +51,16 @@ Item {
             }
             Action {
                 text: qsTr("Sensitivity")
-                onTriggered: mainStack.replace("sensitivity_workspace.qml")
+                onTriggered: {
+                    mainStack.replace("sensitivity_workspace.qml")
+//                    window.close()
+//                    var component = Qt.createComponent("sensitivity_workspace.qml")
+//                    var new_window = component.createObject(window)
+//                    new_window.show()
+//                    new_window.x = window.x + window.width/2 - new_window.width/2
+//                    new_window.y = window.y + window.height/2 - new_window.height/2
+                }
+
             }
         }
 
@@ -76,13 +100,13 @@ Item {
             anchors.topMargin: 5
 //            Component.onCompleted: {
 //                var component = Qt.createComponent("optimisation_workspace_allruns.qml")
-//                var new_window    = component.createObject(window)
+//                var new_window = component.createObject(window)
 //                new_window.show()
 //            }
 
             onClicked: {
                 var component = Qt.createComponent("optimisation_workspace_allruns.qml")
-                var new_window    = component.createObject(window)
+                var new_window = component.createObject(window)
                 new_window.show()
             }
         }

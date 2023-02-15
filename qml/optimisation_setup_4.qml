@@ -8,11 +8,17 @@ Item {
     width: 450
     height: 300
     Component.onCompleted: {
+        window.x = window.x + window.width/2 - width/2
+        window.y = window.y + window.height/2 - height/2
         window.width = width
         window.height = height
-        window.x = Screen.width / 2 - width / 2
-        window.y = Screen.height / 2 - height / 2
     }
+
+//Window {
+//    id: window
+//    width: 450; height: 300
+//    title: "User-Centirc Software to Assist Design for Forming"
+//    visible: true
     
     Rectangle {
         id: titleBar
@@ -210,12 +216,18 @@ Item {
             x: 398
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
+            anchors.rightMargin: 10
+            text: qsTr("Next")
             onClicked: {
                 backend.start_optimisation()
                 mainStack.replace("optimisation_setup_5.qml")
+//                window.close()
+//                var component = Qt.createComponent("optimisation_setup_5.qml")
+//                var new_window = component.createObject(window)
+//                new_window.show()
+//                new_window.x = window.x + window.width/2 - new_window.width/2
+//                new_window.y = window.y + window.height/2 - new_window.height/2
             }
-            anchors.rightMargin: 10
-            text: qsTr("Next")
         }
 
         Button {
@@ -224,8 +236,16 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             anchors.leftMargin: 10
-            onClicked: mainStack.replace("optimisation_setup_3.qml")
             text: qsTr("Back")
+            onClicked: {
+                mainStack.replace("optimisation_setup_3.qml")
+//                window.close()
+//                var component = Qt.createComponent("optimisation_setup_3.qml")
+//                var new_window = component.createObject(window)
+//                new_window.show()
+//                new_window.x = window.x + window.width/2 - new_window.width/2
+//                new_window.y = window.y + window.height/2 - new_window.height/2
+            }
         }
     }
 

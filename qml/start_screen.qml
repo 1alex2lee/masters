@@ -8,11 +8,21 @@ Item {
     width: 500
     height: 150
     Component.onCompleted: {
+//        window.x = Screen.width / 2 - width / 2
+//        window.y = Screen.height / 2 - height / 2
+        window.x = window.x + window.width/2 - width/2
+        window.y = window.y + window.height/2 - height/2
         window.width = width
         window.height = height
-        window.x = Screen.width / 2 - width / 2
-        window.y = Screen.height / 2 - height / 2
     }
+
+//Window {
+//    id: window
+//    width: 500; height: 150
+//    title: "User-Centirc Software to Assist Design for Forming"
+//    visible: true
+//    x: Screen.width/2 - width/2
+//    y: Screen.height/2 - height/2
 
     Rectangle {
         id: titleBar
@@ -39,7 +49,26 @@ Item {
         }
     }
 
+    Rectangle {
+        id: subtitleBar
+        height: 20
+        color: "#ffffff"
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: titleBar.bottom
+        anchors.rightMargin: 0
+        anchors.leftMargin: 0
+        anchors.topMargin: 0
 
+        Text {
+            id: subtitle
+            text: qsTr("Select mode to begin")
+            anchors.fill: parent
+            font.pixelSize: 12
+            verticalAlignment: Text.AlignVCenter
+            anchors.leftMargin: 10
+        }
+    }
 
     Rectangle {
         id: container
@@ -61,6 +90,14 @@ Item {
             anchors.leftMargin: 0
             anchors.topMargin: 0
             onClicked: mainStack.replace("prediction_setup_1.qml")
+//            onClicked: {
+//                window.close()
+//                var component = Qt.createComponent("prediction_setup_1.qml")
+//                var new_window = component.createObject(window)
+//                new_window.show()
+//                new_window.x = window.x + window.width/2 - new_window.width/2
+//                new_window.y = window.y + window.height/2 - new_window.height/2
+//            }
         }
 
         Button {
@@ -73,6 +110,14 @@ Item {
             anchors.topMargin: 0
             anchors.leftMargin: 0
             onClicked: mainStack.replace("optimisation_setup_1.qml")
+//            onClicked: {
+//                window.close()
+//                var component = Qt.createComponent("optimisation_setup_1.qml")
+//                var new_window = component.createObject(window)
+//                new_window.show()
+//                new_window.x = window.x + window.width/2 - new_window.width/2
+//                new_window.y = window.y + window.height/2 - new_window.height/2
+//            }
             anchors.bottomMargin: 0
         }
 
@@ -87,6 +132,14 @@ Item {
             anchors.leftMargin: 0
             anchors.bottomMargin: 0
             onClicked: mainStack.replace("sensitivity_setup_1.qml")
+//            onClicked: {
+//                window.close()
+//                var component = Qt.createComponent("sensitivity_setup_1.qml")
+//                var new_window = component.createObject(window)
+//                new_window.show()
+//                new_window.x = window.x + window.width/2 - new_window.width/2
+//                new_window.y = window.y + window.height/2 - new_window.height/2
+//            }
         }
 
         Button {
@@ -101,27 +154,14 @@ Item {
             anchors.bottomMargin: 0
             anchors.topMargin: 0
             onClicked: mainStack.replace("developer_setup_1.qml")
-        }
-    }
-
-    Rectangle {
-        id: subtitleBar
-        height: 20
-        color: "#ffffff"
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: titleBar.bottom
-        anchors.rightMargin: 0
-        anchors.leftMargin: 0
-        anchors.topMargin: 0
-
-        Text {
-            id: subtitle
-            text: qsTr("Select mode to begin")
-            anchors.fill: parent
-            font.pixelSize: 12
-            verticalAlignment: Text.AlignVCenter
-            anchors.leftMargin: 10
+//            onClicked: {
+//                window.close()
+//                var component = Qt.createComponent("developer_setup_1.qml")
+//                var new_window = component.createObject(window)
+//                new_window.show()
+//                new_window.x = window.x + window.width/2 - new_window.width/2
+//                new_window.y = window.y + window.height/2 - new_window.height/2
+//            }
         }
     }
 

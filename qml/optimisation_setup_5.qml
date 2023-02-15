@@ -9,11 +9,17 @@ Item {
     width: 500
     height: 500
     Component.onCompleted: {
+        window.x = window.x + window.width/2 - width/2
+        window.y = window.y + window.height/2 - height/2
         window.width = width
         window.height = height
-        window.x = Screen.width / 2 - width / 2
-        window.y = Screen.height / 2 - height / 2
     }
+
+//Window {
+//    id: window
+//    width: 500; height: 500
+//    title: "User-Centirc Software to Assist Design for Forming"
+//    visible: true
 
     Rectangle {
         id: titleBar
@@ -105,11 +111,17 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
             visible: false
-            onClicked: {
-                mainStack.replace("optimisation_workspace.qml")
-            }
             anchors.rightMargin: 10
             text: qsTr("Show Results")
+            onClicked: {
+                mainStack.replace("optimisation_workspace.qml")
+//                window.close()
+//                var component = Qt.createComponent("optimisation_workspace.qml")
+//                var new_window = component.createObject(window)
+//                new_window.show()
+//                new_window.x = window.x + window.width/2 - new_window.width/2
+//                new_window.y = window.y + window.height/2 - new_window.height/2
+            }
         }
 
         Button {
@@ -118,13 +130,13 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
             visible: true
+            anchors.rightMargin: 10
+            text: qsTr("Stop Early")
             onClicked: {
                 backend.stop_optimisation()
                 earlystopButton.visible = false
                 nextButton.visible = true
             }
-            anchors.rightMargin: 10
-            text: qsTr("Stop Early")
         }
 
         Button {
@@ -133,11 +145,17 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             anchors.leftMargin: 10
+            text: qsTr("Cancel")
             onClicked: {
                 backend.stop_optimisation()
                 mainStack.replace("optimisation_setup_3.qml")
+//                window.close()
+//                var component = Qt.createComponent("optimisation_setup_3.qml")
+//                var new_window = component.createObject(window)
+//                new_window.show()
+//                new_window.x = window.x + window.width/2 - new_window.width/2
+//                new_window.y = window.y + window.height/2 - new_window.height/2
             }
-            text: qsTr("Cancel")
         }
     }
 
@@ -148,7 +166,7 @@ Item {
             if (x/runsno <= 1) {
                 progressBar.value = x/runsno
 
-                progressLine.append(x, y)
+                progressLine.append(x-1, y)
                 x_axis.max = x
                 if (y > y_axis.max*1.1) {
                     y_axis.max = y*1.1

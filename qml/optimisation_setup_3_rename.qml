@@ -21,8 +21,7 @@ Window {
             title: "Exit"
             Action {
                 text: "Exit"
-                onTriggered: renamewindow
-        .close()
+                onTriggered: renamewindow.close()
             }
         }
     }

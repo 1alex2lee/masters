@@ -1,20 +1,19 @@
-import json, os
+import json
 
-from python import die
+from python import die, model_control
 
+selected_process = "Car Door Panel Stamping"
+selected_material = "Aluminium Aloy 5754"
 
-def predictionmesh (die_dir, edge_dir):
-    # print("die directory is " + die_dir)
-    # print("edge direcotry is " + edge_dir)
-
-    die.load(die_dir, edge_dir)
-
+def predictionmesh (die_dir, edge_dir, blank_dir, qml):
+    # print(blank_dir)
+    die.load(die_dir, edge_dir, blank_dir, qml)
 
 def materials ():
     with open('info.json') as f:
         info = json.load(f)
 
-        return [ material["name"] for material in info["materials"] ]
+        return info["materials"]
 
 
 def processes ():
@@ -25,51 +24,104 @@ def processes ():
 
 
 def modeltypes ():
+    global selected_process
+
     with open('info.json') as f:
         info = json.load(f)
 
-        return [ model["name"] for model in info["models"] ]
+        for process in info["processes"]:
+            if process["name"] == selected_process:
+                return process["models"]
 
 
-def model_inputs (model_type):
+def process_inputs ():
+    global selected_process
+
     with open('info.json') as f:
         info = json.load(f)
 
-        for model in info["models"]:
-            if model["name"] == model_type:
-                return [ input["name"] for input in model["inputs"] ]
+        for process in info["processes"]:
+            if process["name"] == selected_process:
+                return [ input["name"] for input in process["inputs"] ]
         
 
-def model_input_units (model_type, input_name):
+def process_input_units (input_name):
+    global selected_process
+
     with open('info.json') as f:
         info = json.load(f)
 
-        for model in info["models"]:
-            if model["name"] == model_type:
-                for input in model["inputs"]:
+        for process in info["processes"]:
+            if process["name"] == selected_process:
+                for input in process["inputs"]:
                     if input["name"] == input_name:
                         return input["units"]
+                    
 
+def process_input_lowerbound (input_name):
+    global selected_process
 
-def model_outputs (model_type):
     with open('info.json') as f:
         info = json.load(f)
 
-        for model in info["models"]:
-            if model["name"] == model_type:
-                return [ output["name"] for output in model["outputs"] ]
+        for process in info["processes"]:
+            if process["name"] == selected_process:
+                for input in process["inputs"]:
+                    if input["name"] == input_name:
+                        return input["lower bound"]
+                    
+                    
+def process_input_upperbound (input_name):
+    global selected_process
+
+    with open('info.json') as f:
+        info = json.load(f)
+
+        for process in info["processes"]:
+            if process["name"] == selected_process:
+                for input in process["inputs"]:
+                    if input["name"] == input_name:
+                        return input["upper bound"]
+                    
+                    
+def process_input_decimals (input_name):
+    global selected_process
+
+    with open('info.json') as f:
+        info = json.load(f)
+
+        for process in info["processes"]:
+            if process["name"] == selected_process:
+                for input in process["inputs"]:
+                    if input["name"] == input_name:
+                        return input["decimals"]
+
+
+def process_outputs (process_name):
+    with open('info.json') as f:
+        info = json.load(f)
+
+        for process in info["processes"]:
+            if process["name"] == process_name:
+                return [ output["name"] for output in process["outputs"] ]
             
 
     # return [ model["outputs"] if model["name"] for model in info["models"] == model_type  ]
 
 
-def materialandprocess (material, process):
-    if material == "Aluminium":
-        print("aluminium selected")
-    if material == "Steel":
-        print("steel selected")
-    if process == "Cold Stamping":
-        print("cold stamping selected")
+def select_materialandprocess (material, process):
+    global selected_process, selected_material
+
+    selected_material = material
+    selected_process = process
+
+    model_control.selectMaterialandProcess(material, process)
+
+
+def get_selected_materialandprocess ():
+    global selected_process, selected_material
+
+    return selected_process, selected_material
 
 
 def optivaropts ():

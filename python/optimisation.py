@@ -11,11 +11,11 @@ with open('info.json') as f:
     info = json.load(f)
 
     all_vars = []
-    for model in info["models"]:
-        for input in model["inputs"]:
+    for process in info["processes"]:
+        for input in process["inputs"]:
             if input["name"] not in all_vars:
                 all_vars.append(input["name"])
-        for output in model["outputs"]:
+        for output in process["outputs"]:
             if output["name"] not in all_vars:
                 all_vars.append(output["name"])
 
@@ -41,16 +41,16 @@ def load_varopts ():
     return all_vars
 
 
-def enable_vars (var_name, model_type):
+def enable_vars (var_name, process_type):
     with open('info.json') as f:
         info = json.load(f)
 
-        for model in info["models"]:
-            if model["name"] == model_type:
-                for input in model["inputs"]:
+        for process in info["processes"]:
+            if process["name"] == process_type:
+                for input in process["inputs"]:
                     if input["name"] == var_name:
                         return True
-                for output in model["outputs"]:
+                for output in process["outputs"]:
                     if output["name"] == var_name:
                         return True
         return False
@@ -59,7 +59,7 @@ def enable_vars (var_name, model_type):
 def pick_option (option):
     global picked_vars
 
-    option = str(option).lower()
+    # option = str(option).lower()
     picked_vars.append(option)
     print(option + " picked")
 
@@ -67,7 +67,7 @@ def pick_option (option):
 def unpick_option (option):
     global picked_vars
 
-    option = str(option).lower()
+    # option = str(option).lower()
     if option in picked_vars:
         picked_vars.remove(option)
         print(option + " unpicked")
@@ -76,7 +76,7 @@ def unpick_option (option):
 def set_options (material, process, model, goal, aim, setto, search, runsno):
     global options
 
-    options = [goal.lower(), aim.lower(), setto, search, runsno, model]
+    options = [goal, aim, setto, search, runsno, model]
     print("options set: ",material, process, model, goal, aim, setto, search, runsno)
 
     model_control.selectMaterialandProcess(material, process)
